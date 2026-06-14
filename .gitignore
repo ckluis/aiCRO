@@ -1,0 +1,46 @@
+# ============================================================
+# aiCRO — open-source repo hygiene
+#
+# THE LOAD-BEARING RULE: real client engagements live in companies/
+# and MUST NEVER be committed. The pipeline keeps writing there locally;
+# git never sees it. The clonable example is demo/ (a fictional company),
+# which IS committed.
+# ============================================================
+
+# --- Client data — never commit anything under companies/ -----------
+# Ignore the whole tree, then un-ignore only the explanatory stub so the
+# folder exists in the repo with instructions but zero client content.
+/companies/*
+!/companies/README.md
+!/companies/.gitkeep
+
+# Shipped client zips
+/dist/
+
+# --- Operator-internal scratch anywhere (defense in depth) ----------
+# Even if a _work/ dir appears outside companies/, never commit it.
+**/_work/
+
+# --- OS / editor cruft ----------------------------------------------
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# --- Finder duplicate slips -----------------------------------------
+* 2.html
+* 2.css
+* 2.js
+* 2.md
+* 2/
+
+# --- Browser/QA audit artifacts -------------------------------------
+.gstack/
+**/.gstack/
+
+# --- Internal scouting digests of a real prior engagement -----------
+# These predate the client-anonymity hardening and reference real client
+# identifiers; keep them local, never publish.
+/process/research/design-critique.md
+/process/research/legacy-pipeline-brief.md

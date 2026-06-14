@@ -1,0 +1,248 @@
+/* ==========================================================================
+   aiCRO — site-brand.css  ·  the rebuilt-website design system STARTER
+   --------------------------------------------------------------------------
+   This is the quality floor for every engagement's rebuilt mock site
+   (companies/<slug>/analysis/website/site/shared/brand.css). A build agent
+   COPIES this file, then RESKINS it by editing ONLY the token block below to
+   match the subject's brand — it never starts a stylesheet from scratch. The
+   components are tuned to look like a $15k agency site out of the box.
+
+   HARD RULES (non-negotiable — these are why mock sites used to look broken):
+     · System fonts only. No <link> to fonts, no @font-face, no @import,
+       no url() to any CDN. The whole site opens from file:// with ZERO
+       network requests.
+     · NO empty placeholders. Every visual is a finished element: a CSS
+       gradient panel (.visual) with an inline SVG motif, an .ico tile with
+       an inline SVG, a .feature-card product mock, or a real data viz.
+       NEVER ship an empty box or a "[photo here]" placeholder — that is the
+       single thing that makes a mock site read as a broken wireframe.
+     · Every major <section> carries data-note="<kebab-id>" (the guided
+       preview annotates them).
+     · Mobile-responsive, real @media print, prefers-reduced-motion honored.
+
+   TO RESKIN (the only edits an agent should make to this file):
+     1. Set --brand-600 / --brand-700 to the subject's primary hue, and fill
+        the --brand-50/100/200/500/800 ramp toward it (light → dark).
+     2. Set --accent (+ --accent-soft, --accent-ink) to the secondary/CTA hue.
+     3. Optionally warm/cool --paper, --cream and the --ink ramp.
+     4. Optionally adjust --radius / --radius-lg for a softer or sharper feel.
+   Everything below the token block is the proven component system — leave it.
+   ========================================================================== */
+
+:root {
+  /* ---- ink ---- */
+  --ink:    #1d2733;   /* near-black, slight cool */
+  --ink-2:  #44505d;
+  --ink-3:  #7a8693;
+  --paper:  #ffffff;
+  --cream:  #f6f5f1;   /* warm page background */
+  --cream-2:#efeee7;
+
+  /* ---- brand ramp (RESKIN: one hue, light→dark) ---- */
+  --brand-50:  #eef3f4;
+  --brand-100: #dbe7e9;
+  --brand-200: #bcd2d6;
+  --brand-500: #3f7c87;
+  --brand-600: #2f6470;   /* the brand color */
+  --brand-700: #244e58;   /* deep */
+  --brand-800: #1b3a42;
+
+  /* ---- accent (RESKIN: CTA / highlight hue, used sparingly) ---- */
+  --accent:      #d2832e;
+  --accent-soft: #f6e4cc;
+  --accent-ink:  #7a4910;
+
+  --line:   rgba(29,39,51,.10);
+  --line-2: rgba(29,39,51,.16);
+  --star:   #e3a02e;
+
+  --shadow-sm: 0 1px 2px rgba(29,39,51,.05), 0 1px 3px rgba(29,39,51,.06);
+  --shadow-md: 0 4px 10px -2px rgba(29,39,51,.08), 0 12px 24px -10px rgba(29,39,51,.14);
+  --shadow-lg: 0 12px 28px -8px rgba(29,39,51,.16), 0 30px 60px -20px rgba(29,39,51,.22);
+
+  --radius:    14px;
+  --radius-lg: 22px;
+  --pill:      999px;
+
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --maxw: 1120px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--cream); color: var(--ink);
+  font: 17px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+img, svg { max-width: 100%; display: block; }
+a { color: var(--brand-700); text-underline-offset: 2px; }
+
+h1, h2, h3, h4 { margin: 0 0 .5em; line-height: 1.1; letter-spacing: -.02em; font-weight: 800; color: var(--ink); }
+h1 { font-size: clamp(2.1rem, 4.6vw, 3.4rem); letter-spacing: -.03em; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); }
+h3 { font-size: 1.18rem; font-weight: 750; }
+p { margin: 0 0 1rem; }
+.lead { font-size: 1.18rem; line-height: 1.55; color: var(--ink-2); }
+.eyebrow { font-size: .76rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-600); margin: 0 0 .7rem; }
+.section { padding: clamp(3rem, 7vw, 5.5rem) 0; }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(20px, 5vw, 40px); }
+.center { text-align: center; }
+.measure { max-width: 60ch; }
+.center .measure { margin-inline: auto; }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; gap: .5em; font: 700 1rem/1 var(--sans);
+  padding: .95em 1.5em; border-radius: var(--pill); text-decoration: none; cursor: pointer;
+  border: 1.5px solid transparent; transition: transform .12s ease, box-shadow .12s ease, background .12s ease; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--brand-600); color: #fff; box-shadow: var(--shadow-md); }
+.btn-primary:hover { background: var(--brand-700); }
+.btn-accent { background: var(--accent); color: #2a1804; box-shadow: var(--shadow-md); }
+.btn-accent:hover { filter: brightness(1.04); }
+.btn-ghost { background: #fff; color: var(--ink); border-color: var(--line-2); }
+.btn-ghost:hover { border-color: var(--brand-500); color: var(--brand-700); }
+.btn-lg { padding: 1.1em 1.8em; font-size: 1.06rem; }
+
+/* ---------- sticky nav ---------- */
+.nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--cream) 95%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px); border-bottom: 1px solid var(--line); box-shadow: 0 1px 0 rgba(29,39,51,.03); }
+.nav .wrap { display: flex; align-items: center; gap: 1.4rem; height: 68px; }
+.brand { display: inline-flex; align-items: center; gap: .55rem; font-weight: 850; font-size: 1.16rem;
+  letter-spacing: -.02em; color: var(--ink); text-decoration: none; }
+.brand .mark { width: 30px; height: 30px; flex: none; }
+.nav nav { margin-left: auto; display: flex; align-items: center; gap: 1.5rem; }
+.nav nav a:not(.btn) { color: var(--ink-2); text-decoration: none; font-weight: 600; font-size: .96rem; }
+.nav nav a:not(.btn):hover { color: var(--brand-700); }
+.nav .btn { padding: .7em 1.2em; }
+@media (max-width: 800px){ .nav nav a:not(.btn){ display:none; } }
+
+/* ---------- hero ---------- */
+.hero { background:
+    radial-gradient(120% 120% at 85% -10%, var(--brand-100) 0%, rgba(0,0,0,0) 55%),
+    linear-gradient(180deg, var(--brand-50) 0%, var(--cream) 70%);
+  border-bottom: 1px solid var(--line); }
+.hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(1.5rem,4vw,3.5rem);
+  align-items: center; padding-top: clamp(2.5rem,6vw,4.5rem); padding-bottom: clamp(2.5rem,6vw,4.5rem); }
+.hero h1 { margin-bottom: .35em; }
+.hero h1 .hl { color: var(--brand-700); background: linear-gradient(transparent 68%, var(--accent-soft) 0); padding: 0 .08em; border-radius: 2px; }
+.hero .trust-row { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; margin-top: 1.4rem; align-items: center; font-size: .9rem; color: var(--ink-2); font-weight: 600; }
+.hero .trust-row .dot { color: var(--ink-3); }
+.stars { color: var(--star); letter-spacing: 1px; }
+.hero .cta-row { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+.hero-visual { position: relative; }
+@media (max-width: 860px){ .hero .wrap { grid-template-columns: 1fr; } .hero-visual { order: -1; } .chip { display: none; } }
+
+/* the hero showpiece "card" — a product/quote/spec/stat mock, NOT a photo.
+   Reskin its label + rows to suit the business (a price estimate, a spec
+   sheet, a sample report, a booking widget). The point: a believable,
+   on-brand object that reads as the product, filling the hero visual slot. */
+.feature-card { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  border: 1px solid var(--line); overflow: hidden; }
+.feature-card .fc-head { background: var(--brand-700); color: #fff; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+.feature-card .fc-head b { font-size: 1.02rem; }
+.feature-card .fc-head .pill { background: rgba(255,255,255,.18); color: #fff; font-size: .72rem; font-weight: 700; padding: .3em .7em; border-radius: var(--pill); }
+.feature-card .fc-body { padding: 1.2rem 1.25rem 1.35rem; }
+.fc-field { margin-bottom: .85rem; }
+.fc-field label { font-size: .76rem; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+.fc-seg { display: flex; gap: .4rem; margin-top: .4rem; }
+.fc-seg span { flex: 1; text-align: center; font-size: .86rem; font-weight: 650; padding: .55em .2em; border-radius: 10px; border: 1.5px solid var(--line-2); color: var(--ink-2); background: #fff; }
+.fc-seg span.on { border-color: var(--brand-600); background: var(--brand-50); color: var(--brand-700); }
+.fc-highlight { margin-top: 1rem; background: var(--brand-50); border: 1px solid var(--brand-100); border-radius: 12px; padding: .9rem 1.05rem; display: flex; align-items: baseline; justify-content: space-between; }
+.fc-highlight .lab { font-size: .82rem; color: var(--ink-2); font-weight: 600; }
+.fc-highlight .amt { font-size: 1.7rem; font-weight: 850; color: var(--brand-700); letter-spacing: -.02em; }
+.fc-highlight .amt small { font-size: .8rem; font-weight: 600; color: var(--ink-3); }
+.feature-card .btn { width: 100%; justify-content: center; margin-top: 1rem; }
+/* floating credibility chip on the hero visual */
+.chip { position: absolute; background: #fff; border-radius: var(--pill); box-shadow: var(--shadow-md); border: 1px solid var(--line); padding: .5rem .85rem; font-size: .82rem; font-weight: 650; display: inline-flex; align-items: center; gap: .45rem; }
+.hero-visual .chip-1 { top: -14px; left: -10px; }
+.hero-visual .chip-2 { bottom: -14px; right: 8px; }
+
+/* ---------- trust bar ---------- */
+.trustbar { background: var(--paper); border-bottom: 1px solid var(--line); }
+.trustbar .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2.4rem; align-items: center; justify-content: center; padding-top: 1.1rem; padding-bottom: 1.1rem; }
+.trustbar .ti { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; font-size: .92rem; color: var(--ink-2); }
+.trustbar .ti svg { color: var(--brand-600); }
+
+/* ---------- grids + cards ---------- */
+.grid { display: grid; gap: 1.1rem; }
+.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px){ .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px){ .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; } }
+.card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem 1.4rem; box-shadow: var(--shadow-sm); transition: transform .14s ease, box-shadow .14s ease; }
+.card.hover:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.card h3 { margin-bottom: .35rem; }
+.card p { color: var(--ink-2); font-size: .96rem; margin: 0; }
+/* icon tile — drop an inline SVG inside */
+.ico { width: 46px; height: 46px; border-radius: 12px; background: var(--brand-50); color: var(--brand-700); display: grid; place-items: center; margin-bottom: 1rem; border: 1px solid var(--brand-100); }
+.ico svg { width: 24px; height: 24px; }
+
+/* ---------- "image" fields: gradient + inline SVG, NEVER empty ----------
+   Use anywhere you'd want a photo. Put a FINISHED, abstract/geometric/branded
+   inline SVG inside (pattern, isometric shape, motif, data-viz) so the panel
+   reads as an intentional designed graphic that stands on its own.
+   TWO BUGS to avoid: (1) an empty .visual; (2) a literal-subject line sketch
+   captioned "PHOTO — x" / "photo goes here" — that reads as a missing photo,
+   the exact broken-mockup look. If the client should later drop a real photo
+   here, say so in the section's guided-preview note or an HTML comment, NEVER
+   as visible text on the page. */
+.visual { border-radius: var(--radius-lg); overflow: hidden; position: relative; min-height: 200px;
+  background: linear-gradient(135deg, var(--brand-200), var(--brand-50)); border: 1px solid var(--line); }
+.visual.tall { min-height: 320px; }
+.visual.brand { background: linear-gradient(135deg, var(--brand-500), var(--brand-700)); }
+.visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ---------- how-it-works steps ---------- */
+.steps { counter-reset: step; }
+.step { position: relative; padding-left: 3.4rem; }
+.step::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: -.1rem;
+  width: 2.4rem; height: 2.4rem; border-radius: var(--pill); background: var(--brand-700); color: #fff; font-weight: 800; display: grid; place-items: center; }
+
+/* ---------- pricing / tier cards ---------- */
+.price { display: flex; flex-direction: column; }
+.price.feature { border-color: var(--brand-600); box-shadow: var(--shadow-lg); position: relative; }
+.price.feature .tagband { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #2a1804; font-size: .72rem; font-weight: 800; letter-spacing: .04em; padding: .35em .9em; border-radius: var(--pill); text-transform: uppercase; }
+.price .amt { font-size: 2.4rem; font-weight: 850; color: var(--ink); letter-spacing: -.03em; margin: .3rem 0; }
+.price .amt small { font-size: .9rem; font-weight: 600; color: var(--ink-3); }
+.price ul { list-style: none; padding: 0; margin: 1rem 0 1.4rem; display: grid; gap: .55rem; }
+.price li { display: flex; gap: .55rem; font-size: .95rem; color: var(--ink-2); }
+.price li svg { color: var(--brand-600); flex: none; margin-top: 2px; }
+.price .btn { margin-top: auto; justify-content: center; }
+
+/* ---------- testimonials ---------- */
+.quoteblock { font-size: 1.02rem; line-height: 1.6; color: var(--ink); }
+.who { display: flex; align-items: center; gap: .7rem; margin-top: 1rem; }
+.avatar { width: 40px; height: 40px; border-radius: var(--pill); background: var(--brand-600); color: #fff; font-weight: 800; display: grid; place-items: center; font-size: .9rem; flex: none; }
+.who .nm { font-weight: 700; font-size: .9rem; }
+.who .mt { font-size: .82rem; color: var(--ink-3); }
+
+/* ---------- banded sections ---------- */
+.band-brand { background: var(--brand-700); color: #fff; }
+.band-brand h2, .band-brand h3 { color: #fff; }
+.band-brand .lead { color: rgba(255,255,255,.85); }
+.band-brand .eyebrow { color: var(--accent); }
+.band-cream { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.cta-band { background: linear-gradient(135deg, var(--brand-700), var(--brand-800)); color: #fff; border-radius: var(--radius-lg); padding: clamp(2rem,5vw,3.4rem); text-align: center; box-shadow: var(--shadow-lg); }
+.cta-band h2 { color: #fff; }
+.cta-band .lead { color: rgba(255,255,255,.85); margin-inline: auto; }
+
+/* ---------- footer ---------- */
+.foot { background: var(--ink); color: rgba(255,255,255,.7); padding: 3rem 0 2rem; }
+.foot a { color: rgba(255,255,255,.7); text-decoration: none; }
+.foot a:hover { color: #fff; }
+.foot .cols { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 2rem; }
+@media (max-width: 760px){ .foot .cols { grid-template-columns: 1fr 1fr; } }
+.foot h4 { color: #fff; font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .9rem; }
+.foot ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; font-size: .92rem; }
+.foot .legal { margin-top: 2.4rem; padding-top: 1.4rem; border-top: 1px solid rgba(255,255,255,.12); font-size: .82rem; display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; justify-content: space-between; }
+.foot .brand { color: #fff; }
+
+/* utility */
+.mt0{margin-top:0}.mb0{margin-bottom:0}
+.flex{display:flex;align-items:center;gap:.7rem}.between{justify-content:space-between}
+.pop { background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:1.2rem 1.3rem; }
+
+@media (prefers-reduced-motion: reduce){ *{ transition:none!important; scroll-behavior:auto!important; } }
+@media print { .nav { box-shadow: none; } body { background: #fff; } .cta-band { box-shadow: none; } }

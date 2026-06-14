@@ -1,0 +1,407 @@
+<!doctype html>
+<!--
+  aiCRO execution plan — Marigold Home Cleaning (fictional demo).
+  Structure copied from process/templates/plan-shell.html. Phases in order:
+  −1 access/ownership gate, 0 credibility (live-defects-only) gate, 1…4.
+  Every task: what · owner · minutes · day · how. Checkboxes persist via app.js.
+  Rationale links point at ../book/index.html chapter anchors.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Plan — Marigold Home Cleaning</title>
+<link rel="stylesheet" href="../shared/aicro.css">
+<style>:root { --accent: #3a6149; --accent-wash: #E7F0EA; --accent-deep: #2C4A38; }</style>
+</head>
+<body data-doc="plan">
+<div id="progress"></div>
+<div class="doc">
+
+  <nav class="toc" aria-label="Phases">
+    <div class="brand">Marigold Home Cleaning</div>
+    <div class="brand-sub">The Plan · 13 June 2026</div>
+    <div class="part">Do in order</div>
+    <a href="#ph-m1"><span class="n">−1</span><span>Access &amp; ownership</span></a>
+    <a href="#ph-0"><span class="n">0</span><span>Five credibility fixes</span></a>
+    <a href="#ph-1"><span class="n">1</span><span>Booking + instant price</span></a>
+    <a href="#ph-2"><span class="n">2</span><span>Surface the trust</span></a>
+    <a href="#ph-3"><span class="n">3</span><span>Emphasize recurring</span></a>
+    <a href="#ph-4"><span class="n">4</span><span>Demand, paced to the team</span></a>
+    <div class="part">Keep honest</div>
+    <a href="#capacity"><span class="n">◷</span><span>Your real capacity</span></a>
+    <a href="#deferred"><span class="n">…</span><span>Deferred (on purpose)</span></a>
+    <a href="#checkpoint"><span class="n">30</span><span>The 30-day check</span></a>
+    <div class="toc-foot">Checkboxes save in your browser.<br>Print this; it prints clean.</div>
+  </nav>
+
+  <main>
+    <span class="kicker">The Plan · Marigold Home Cleaning · 13 June 2026</span>
+    <h1>Six gates and phases, in order, sized to your real week</h1>
+
+    <div class="brief">
+      <span class="kicker">How to use this document</span>
+      <p>This is the companion to the book — the same 90-day argument, turned
+      into tasks you can tick off. It runs in order: two gates first (get the
+      keys, then fix the five things that quietly cost you trust), then the four
+      build phases. The first day costs about <strong>95 minutes of Renata's
+      time</strong> and unblocks everything else.</p>
+      <p>The gates are gates. A phase below a gate does not start until the gate
+      above it is green — out-of-order work wastes the work that follows it. Every
+      task names an owner, an estimate in minutes, the day to do it, and exactly
+      where to do it. Tasks that have a "why" link back to the chapter that argues
+      for them.</p>
+      <div class="decision"><b>If you only do one thing today:</b> finish Phase −1
+      (≈45 min) so the developer can start the booking flow tomorrow. Nothing
+      converts until someone can actually edit the site and take a card.</div>
+    </div>
+
+    <!-- ============================================================ GATE −1 -->
+    <section class="phase gate" id="ph-m1">
+      <header>
+        <span class="pill p0">GATE</span>
+        <h3>Phase −1 — Access &amp; ownership</h3>
+        <span class="when">Day 1 · ≈45 min · once</span>
+      </header>
+      <div class="ph-body">
+        <p class="gate-note">Nothing below starts until this is done. The old site
+        had a promo code (<code>SPARKLE25</code>) that expired and started erroring
+        at checkout because no one could log in to turn it off — own the access
+        first so a known defect can never sit live for a season again.</p>
+
+        <ul class="checklist" data-checklist="ph-m1">
+          <li><input type="checkbox" value="cms-login"><label>Confirm Renata can log in to the site CMS and edit a page (change one word, save, undo).</label><span class="meta">Renata · 10 min</span></li>
+          <li><input type="checkbox" value="payments"><label>Confirm the payment account (the card processor) is in Marigold's name and you can see its dashboard. This is the account the booking flow charges against.</label><span class="meta">Renata · 10 min</span></li>
+          <li><input type="checkbox" value="domain"><label>Confirm you control the domain <code>marigoldhome.co</code> (you can reach the registrar login) and the analytics account.</label><span class="meta">Renata · 10 min</span></li>
+          <li><input type="checkbox" value="dev"><label>Name the one developer who will build the booking flow in Phase 1, and give them CMS + payment-test access. One named person, not "a freelancer we'll find."</label><span class="meta">Renata · 10 min</span></li>
+          <li><input type="checkbox" value="baseline"><label>Write down today's three baseline numbers (see the 30-day check at the bottom) before anything changes.</label><span class="meta">Renata · 5 min</span></li>
+        </ul>
+
+        <div class="path"><span class="sep">Where:</span> CMS → Settings → Users (confirm your login) · Payment processor → Dashboard · Registrar → Domains</div>
+
+        <p class="small">Why this first → <a href="../book/index.html#ch-04-gates">Ch. 4 · The two gates the plan is built around</a></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ GATE 0 -->
+    <section class="phase gate" id="ph-0">
+      <header>
+        <span class="pill p0">GATE</span>
+        <h3>Phase 0 — Five credibility fixes (live defects only)</h3>
+        <span class="when">Day 1–2 · ≈50 min · once</span>
+      </header>
+      <div class="ph-body">
+        <p class="gate-note">These five things are live on the site right now and
+        each one manufactures distrust at the worst moment. They are not redesign
+        — they are stopping the bleeding. Do them before any new build, because a
+        beautiful new flow behind a broken promo popup still loses the buyer.</p>
+
+        <ul class="checklist" data-checklist="ph-0">
+          <li><input type="checkbox" value="kill-popup"><label><strong>Kill the on-load "$25 off" popup.</strong> The <code>SPARKLE25</code> code expired last season and now errors at checkout — it interrupts your most ready buyers and then breaks in front of them. Remove the modal entirely; do not "fix the code."</label><span class="meta">Developer · 15 min</span></li>
+          <li><input type="checkbox" value="phone-form"><label><strong>Make the phone number and contact form actually work and actually answered.</strong> Test that a form submission arrives in an inbox someone reads today. Until booking ships, this is your only capture — it cannot be silently broken.</label><span class="meta">Renata · 10 min</span></li>
+          <li><input type="checkbox" value="trust-footer"><label><strong>Move one true line — "Insured &amp; bonded · W-2 team · background-checked · 24-hr re-clean guarantee" — out of the footer and under the hero headline</strong> as plain text. The full trust-bar comes in Phase 2; this is the stopgap so the most expensive asset isn't invisible for a month.</label><span class="meta">Renata · 10 min</span></li>
+          <li><input type="checkbox" value="dead-links"><label><strong>Walk every page and click every link.</strong> Fix or remove anything that 404s, any "coming soon," any stale price, any phone number that isn't yours.</label><span class="meta">Renata · 10 min</span></li>
+          <li><input type="checkbox" value="https"><label><strong>Confirm the site loads over HTTPS with no browser security warning</strong> (the padlock). A "not secure" flag next to a form asking for a home address ends the visit.</label><span class="meta">Developer · 5 min</span></li>
+        </ul>
+
+        <div class="path"><span class="sep">Where:</span> CMS → Pages (remove the popup component sitewide) · CMS → Home → Hero (add the trust line) · CMS → Forms (test a submission)</div>
+
+        <p class="small">Why these five → <a href="../book/index.html#ch-01-d5-d6">Ch. 1 · D5 and D6, the avoidable wounds</a> · <a href="../book/index.html#ch-01-d3">Ch. 1 · D3, the buried trust story</a></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ PHASE 1 -->
+    <section class="phase" id="ph-1">
+      <header>
+        <span class="pill p0">Access gate</span>
+        <h3>Phase 1 — Booking + instant price</h3>
+        <span class="when">Weeks 1–3 · fixes D1, D2, D5</span>
+      </header>
+      <div class="ph-body">
+        <p>The one phase that is non-negotiably first. It is done when a buyer who
+        has never spoken to Marigold can see a real price and confirm a clean
+        <em>without a phone call</em>. Until then, every other improvement just
+        qualifies demand the site can't capture.</p>
+
+        <figure class="exhibit">
+          <figcaption><span class="exnum"></span>Phase 1 tasks
+            <span class="exnote">The developer owns the build; Renata owns the pricing decisions and the test. "Day" is the target day within the phase.</span></figcaption>
+          <div class="exbody flush">
+            <table>
+              <thead><tr><th>Task</th><th>Owner</th><th class="num">Min</th><th>Day</th></tr></thead>
+              <tbody>
+                <tr><td>Set the flat per-visit prices to publish: <strong>$129 weekly · $149 every-2-weeks · $189 monthly · ~$329 one-time deep clean</strong>, with the "price you see is the price you pay" line. Decide the larger-home and first-deep-clean rules.</td><td>Renata</td><td class="num">45</td><td>1</td></tr>
+                <tr><td>Build the <code>book.html</code> 60-second self-serve flow: home size → frequency → date → card on file, $0 charged today. Reuse and enlarge the <code>.quote-card</code> from the home page into the multi-step form.</td><td>Developer</td><td class="num">—</td><td>2–9</td></tr>
+                <tr><td>Add the instant-price quote-card to the hero of every page, defaulting to <strong>every-2-weeks</strong> (the high-value plan), so the price is on screen before any form.</td><td>Developer</td><td class="num">—</td><td>9–12</td></tr>
+                <tr><td>Publish the flat-pricing tables on a <code>pricing</code> view, larger homes resolving to an exact number inside the flow.</td><td>Developer</td><td class="num">60</td><td>10</td></tr>
+                <tr><td>Change the primary call to action everywhere from "Contact us" to <strong>"See your price &amp; book."</strong></td><td>Renata</td><td class="num">20</td><td>11</td></tr>
+                <tr><td>Test a full booking end to end with a real card, confirm $0 charges today, the booking lands in your calendar, and the confirmation email reads warm and clear.</td><td>Renata</td><td class="num">30</td><td>14</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+
+        <div class="path"><span class="sep">Where:</span> CMS → Pages → New page "Book" · CMS → Components → Quote card → set default frequency = Every 2 weeks · CMS → Navigation → Primary button → label + link to /book</div>
+
+        <div class="callout why">
+          <span class="kicker">Why the price goes on the hero, not behind a form</span>
+          <p>"Call for a quote" reads as "we'll size you up." The busy
+          professional who would happily pay $149 to never think about it again
+          reads opacity as a red flag. A real number on screen turns hesitation
+          into a booking before the impulse cools.</p>
+        </div>
+
+        <p class="small"><strong>The number that proves it:</strong> share of sessions that reach a priced quote; first self-serve bookings with no callback. · Why → <a href="../book/index.html#ch-01-d1">Ch. 1 · D1, the buyer cannot buy</a> · <a href="../book/index.html#ch-04-rebuilt">Ch. 4 · What the rebuilt site does</a></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ PHASE 2 -->
+    <section class="phase" id="ph-2">
+      <header>
+        <span class="pill p1">Credibility gate</span>
+        <h3>Phase 2 — Surface the trust</h3>
+        <span class="when">Weeks 3–6 · fixes D3, D6</span>
+      </header>
+      <div class="ph-body">
+        <p>Once a buyer can book, this decides whether they do. The point is
+        mechanical, not decorative: with trust sitting at the moment of
+        commitment, the flow stops competing on price — the one ground where a
+        $10-cheaper app wins. Starts only after the Phase 1 access gate is green.</p>
+
+        <figure class="exhibit">
+          <figcaption><span class="exnum"></span>Phase 2 tasks
+            <span class="exnote">Trust must sit in the booking path, not on a separate About page nobody reaches before deciding.</span></figcaption>
+          <div class="exbody flush">
+            <table>
+              <thead><tr><th>Task</th><th>Owner</th><th class="num">Min</th><th>Day</th></tr></thead>
+              <tbody>
+                <tr><td>Build the persistent trust-bar directly under the hero on every page: <strong>Insured &amp; bonded · W-2 team · Background-checked · 24-hr re-clean guarantee.</strong> Reuse the shield/check SVGs from the home page.</td><td>Developer</td><td class="num">90</td><td>1–4</td></tr>
+                <tr><td>Add a "Why you can book with confidence" block <em>inside</em> the booking flow, right before the card field, where hesitation peaks.</td><td>Developer</td><td class="num">60</td><td>5–8</td></tr>
+                <tr><td>Write and publish the <code>about.html</code> story: Renata Cole's boutique-hotel housekeeping background, why W-2 (not gig), the background-check, the same-team promise. Warm and human, not a credential list.</td><td>Renata</td><td class="num">90</td><td>6–12</td></tr>
+                <tr><td>Land the <strong>"The home cleaning you'd trust with a key"</strong> headline sitewide as the default; queue candidates 2 and 3 to A/B later.</td><td>Renata</td><td class="num">30</td><td>13</td></tr>
+                <tr><td>Confirm the trust-bar and confidence block render on phone width and survive print (a partner should be able to print the booking page clean).</td><td>Developer</td><td class="num">20</td><td>15</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+
+        <div class="path"><span class="sep">Where:</span> CMS → Components → Trust-bar → enable sitewide under hero · CMS → Book → insert "Why you can book with confidence" before payment step · CMS → Pages → New page "Our team"</div>
+
+        <div class="callout why">
+          <span class="kicker">Why the trust story moves into the path</span>
+          <p>Marigold pays real money to run a W-2 payroll and background-check
+          every cleaner — exactly what a nervous "who am I letting into my house"
+          buyer wants — and the old site mentioned it in a footer line nobody
+          reads. The most expensive, most defensible asset was the least visible.</p>
+        </div>
+
+        <p class="small"><strong>The number that proves it:</strong> quote→book conversion rate lift, now that trust sits in the path. · Why → <a href="../book/index.html#ch-02-moat">Ch. 2 · The honest moat</a> · <a href="../book/index.html#ch-01-d3">Ch. 1 · D3</a></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ PHASE 3 -->
+    <section class="phase" id="ph-3">
+      <header>
+        <span class="pill p1">Aim gate</span>
+        <h3>Phase 3 — Emphasize recurring</h3>
+        <span class="when">Weeks 6–9 · fixes D4</span>
+      </header>
+      <div class="ph-body">
+        <p>With a trusted flow working, point it at the product that compounds.
+        A recurring household is worth roughly eleven one-time cleans of value
+        per year — so the share of new bookings that are recurring is the number
+        that actually grows the business. Make recurring the obvious default and
+        the one-time clean the exception.</p>
+
+        <figure class="exhibit">
+          <figcaption><span class="exnum"></span>Phase 3 tasks
+            <span class="exnote">Every move here nudges the default toward the standing plan without removing the one-time option.</span></figcaption>
+          <div class="exbody flush">
+            <table>
+              <thead><tr><th>Task</th><th>Owner</th><th class="num">Min</th><th>Day</th></tr></thead>
+              <tbody>
+                <tr><td>Build the dedicated <code>recurring.html</code> landing page: how recurring works, what's included, the plan prices, recurring-client testimonials, booking CTA.</td><td>Developer</td><td class="num">120</td><td>1–7</td></tr>
+                <tr><td>Confirm the instant-price card defaults to <strong>every-2-weeks</strong> and carries the line <strong>"most Durham homes choose every 2 weeks."</strong></td><td>Renata</td><td class="num">20</td><td>8</td></tr>
+                <tr><td>Re-order reviews so <strong>recurring-household</strong> testimonials surface first on <code>reviews.html</code> and the home page — name real Durham neighborhoods (Trinity Park, Hope Valley, Watts-Hillandale).</td><td>Renata</td><td class="num">45</td><td>9–11</td></tr>
+                <tr><td>Frame the one-time deep clean as the <em>on-ramp</em> to a plan in the flow ("most homes start with a deep clean, then roll onto every-2-weeks"), not as a peer product.</td><td>Renata</td><td class="num">30</td><td>12</td></tr>
+                <tr><td>Add "skip or reschedule free, no contract" reassurance beside the recurring price, so the commitment feels safe.</td><td>Developer</td><td class="num">30</td><td>13</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+
+        <div class="path"><span class="sep">Where:</span> CMS → Pages → New page "Recurring" · CMS → Components → Quote card → default frequency + helper line · CMS → Reviews → sort/pin recurring testimonials first</div>
+
+        <div class="callout why">
+          <span class="kicker">Why aim, not just build</span>
+          <p>The old site treated a one-time clean and a recurring plan as equals
+          on a flat list. They are not equals — burying the recurring plan in an
+          undifferentiated grid trains demand toward the lowest-value,
+          highest-churn product. Make the high-LTV plan the path of least
+          resistance.</p>
+        </div>
+
+        <p class="small"><strong>The number that proves it:</strong> share of new bookings that are recurring vs. one-time. · Why → <a href="../book/index.html#ch-01-d4">Ch. 1 · D4</a> · <a href="../book/index.html#ch-03-primary">Ch. 3 · Group 1, recurring households</a></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ PHASE 4 -->
+    <section class="phase" id="ph-4">
+      <header>
+        <span class="pill p2">Demand gate</span>
+        <h3>Phase 4 — Demand, paced to the team</h3>
+        <span class="when">Weeks 9–13 · funds the recurring base &amp; channels</span>
+      </header>
+      <div class="ph-body">
+        <p>Only now — with a flow that takes a buyer, reassures them, and points
+        them at recurring — is it safe to pour demand in. And it is poured in
+        <em>metered</em>, because the team of roughly 14 W-2 cleaners is the moat
+        and also a ceiling: a new recurring household handed a rushed or rotating
+        clean is the one failure the brand cannot survive.</p>
+
+        <figure class="exhibit">
+          <figcaption><span class="exnum"></span>Phase 4 tasks, ordered by load on the team
+            <span class="exnote">The moves that add revenue without adding load come first; the ones that add both come last and stay throttleable.</span></figcaption>
+          <div class="exbody flush">
+            <table>
+              <thead><tr><th>Task</th><th>Owner</th><th class="num">Min</th><th>Day</th></tr></thead>
+              <tbody>
+                <tr><td>Stand up a referral mechanic for the recurring base (a clean-credit when a referral converts to a plan). Self-pacing — grows only as fast as happy clients refer.</td><td>Renata</td><td class="num">60</td><td>1–5</td></tr>
+                <tr><td>Local SEO for "recurring house cleaning Durham" and the named neighborhoods: page titles, meta descriptions, a Google Business Profile pass. The booking page is the landing page.</td><td>Developer</td><td class="num">120</td><td>3–12</td></tr>
+                <tr><td>Open realtor outreach (Group 2) — a short list of active Durham agents, a one-page "listing-ready turnover" offer. <strong>Metered:</strong> open only the accounts the team can staff well.</td><td>Renata</td><td class="num">90</td><td>10–18</td></tr>
+                <tr><td>Open short-term-rental host outreach (Group 3) — same-day turnover with a linen reset and photo checklist. <strong>Metered</strong> to the slots you can guarantee.</td><td>Renata</td><td class="num">90</td><td>14–20</td></tr>
+                <tr><td>Set a simple capacity rule before any paid spend: when the every-2-weeks calendar passes <span class="tag estimate">a fill threshold you set — confirm with the schedulers</span>, switch new demand to a short waitlist or trigger a hiring plan. Never a quietly lowered standard.</td><td>Renata</td><td class="num">30</td><td>21</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+
+        <div class="callout warn">
+          <span class="kicker">The capacity trap to refuse</span>
+          <p>Do not buy demand the team cannot serve to the standard the site
+          promises. A recurring household won and then handed a rushed clean
+          churns fast, leaves the review that contradicts the whole position, and
+          costs more to lose than it cost to win. If demand outruns capacity, the
+          answer is a short waitlist or a hire — never a lowered standard. One-time
+          deep cleans receive no proactive spend; the door stays open, the dollar
+          goes to the recurring base.</p>
+        </div>
+
+        <p class="small"><strong>The number that proves it:</strong> cost per acquired recurring client; realtor and STR accounts opened. · Why → <a href="../book/index.html#ch-04-capacity">Ch. 4 · The capacity-honest first moves</a> · <a href="../book/index.html#ch-03-realtors">Ch. 3 · Groups 2 &amp; 3</a></p>
+      </div>
+    </section>
+
+    <!-- ============================================================ CAPACITY -->
+    <section id="capacity">
+      <h2>Your real capacity</h2>
+      <p>The build hours sit with the developer; the hours that gate this plan are
+      <em>Renata's</em>. The "KEEP" set — the owner tasks across all six phases that
+      must be Renata's own hands (pricing decisions, the team story, the booking
+      test, the channel outreach, the capacity rule) — totals about
+      <strong>13.0 hours</strong>, spread over the 13-week run. That is roughly
+      <strong>1.0 hr/week</strong> of owner time. Renata said she has
+      <strong>4 hr/week</strong> to give this. The plan fits with comfortable room
+      to spare — the constraint is never Renata's calendar, it is the team's
+      cleaning capacity once Phase 4 opens.</p>
+
+      <div class="meter"><i style="width:25%"></i></div>
+      <p class="small">1.0 hr/week committed of 4 hr/week you said you have (25%).
+      The plan is well inside your hours; the real ceiling is staffed cleaning
+      slots, not owner time — which is why Phase 4 is metered, not floored.</p>
+
+      <figure class="exhibit">
+        <figcaption><span class="exnum"></span>Owner hours by phase (the KEEP set)
+          <span class="exnote">Developer build hours excluded — those don't compete for Renata's week. Front-loaded into the two gates and Phase 1's pricing call.</span></figcaption>
+        <div class="exbody flush">
+          <table>
+            <thead><tr><th>Phase</th><th class="num">Owner min</th><th>Heaviest week</th></tr></thead>
+            <tbody>
+              <tr><td>−1 · Access &amp; ownership</td><td class="num">45</td><td>Week 1</td></tr>
+              <tr><td>0 · Five credibility fixes</td><td class="num">40</td><td>Week 1</td></tr>
+              <tr><td>1 · Booking + instant price</td><td class="num">95</td><td>Weeks 1–3</td></tr>
+              <tr><td>2 · Surface the trust</td><td class="num">120</td><td>Weeks 4–5</td></tr>
+              <tr><td>3 · Emphasize recurring</td><td class="num">95</td><td>Weeks 7–8</td></tr>
+              <tr><td>4 · Demand, paced to the team</td><td class="num">270</td><td>Weeks 11–13</td></tr>
+              <tr><td><strong>Total</strong></td><td class="num"><strong>665 min ≈ 11.1 hr</strong></td><td>+ ~2 hr testing slack</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+      <p class="small">665 minutes of owner tasks ÷ 60 ≈ 11.1 hr, plus ~2 hr of
+      testing and review slack ≈ 13.0 hr over 13 weeks ≈ 1.0 hr/week. Arithmetic
+      checks.</p>
+    </section>
+
+    <!-- ============================================================ DEFERRED -->
+    <section id="deferred">
+      <h2>Deferred — on purpose</h2>
+      <p>These are good ideas that do not earn their place in the 90 days. Each is
+      held for a reason, with what would unlock it — so nothing here is lost, just
+      sequenced behind the work that pays for it.</p>
+
+      <figure class="exhibit">
+        <figcaption><span class="exnum"></span>What's deferred, and what unlocks it</figcaption>
+        <div class="exbody flush">
+          <table>
+            <thead><tr><th>Idea</th><th>Why it waits</th><th>What unlocks it</th></tr></thead>
+            <tbody>
+              <tr><td>Paid local search ads</td><td>Pouring paid traffic into the flow before it converts pays to lose buyers — and outruns the team fastest.</td><td>A waitlist or hiring plan behind it, and Phase 1–3 conversion numbers proving the flow holds.</td></tr>
+              <tr><td>Customer portal / self-serve reschedule account</td><td>Real value, real build cost; the 60-second booking flow captures the LTV without it.</td><td>A recurring base large enough that reschedule volume is a genuine load on the office.</td></tr>
+              <tr><td>Photography / before-and-after gallery</td><td>The site is deliberately photo-free and calm; trust here comes from the W-2 story, not stock imagery.</td><td>Owned, consistent photography of Marigold's own teams and homes — never stock.</td></tr>
+              <tr><td>Proactive acquisition for one-time deep cleans (Group 5)</td><td>Roughly 4% of a recurring client's value — the dollar is always better spent on the recurring base.</td><td>Nothing planned. The booking door stays open; spend stays at zero by design.</td></tr>
+              <tr><td>A/B testing the three hero candidates</td><td>Needs enough booking traffic to read a result; testing on thin traffic just adds noise.</td><td>Phase 4 demand live long enough to give each variant a real sample.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+
+      <p class="small">Why one-time gets no spend → <a href="../book/index.html#ch-03-onetime">Ch. 3 · Group 5, defunded</a></p>
+    </section>
+
+    <!-- ============================================================ CHECKPOINT -->
+    <section id="checkpoint">
+      <h2>The 30-day check — 13 July 2026</h2>
+      <div class="callout warn">
+        <span class="kicker">Binary, no essay</span>
+        <p><b>On 13 July, can a buyer who has never spoken to Marigold reach a real
+        price and confirm a clean online, with no callback in the path?</b> If no:
+        the access gate has not passed, and the response is a 90-minute working
+        session with the developer to ship it — not another planning document, and
+        not starting Phase 2. Phase 1 is the only phase that is allowed to be late.</p>
+      </div>
+
+      <p>Write these three numbers down <strong>today</strong>, before anything
+      changes, so the 30-day check has a baseline to beat:</p>
+
+      <figure class="exhibit">
+        <figcaption><span class="exnum"></span>Day-0 baseline — write these down now</figcaption>
+        <div class="exbody flush">
+          <table>
+            <thead><tr><th>Number</th><th>Today's value</th><th>Source</th></tr></thead>
+            <tbody>
+              <tr><td>Bookings completed online with no phone call, last 30 days</td><td><span class="tag verify">____ — measure today</span></td><td>Calendar / booking log</td></tr>
+              <tr><td>Share of new bookings that are recurring (vs. one-time), last 30 days</td><td><span class="tag verify">____ — measure today</span></td><td>Calendar / booking log</td></tr>
+              <tr><td>Visitors who reached a real price, last 30 days</td><td><span class="tag verify">0 — there is no instant price yet</span></td><td>Analytics (this becomes measurable once Phase 1 ships)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </figure>
+
+      <p class="small">The whole plan is bent toward the second number — the
+      recurring share — because at roughly eleven one-time cleans of value per
+      year, that is the number that compounds. · See it argued → <a href="../book/index.html#ch-00-why-recurring">Ch. 0 · Why everything points at one product</a></p>
+
+      <div class="callout good">
+        <span class="kicker">Two links, two moves</span>
+        <p>Walk what Phase 1 builds, then start the first task:
+        <a href="../book/index.html#ch-04-rebuilt"><strong>Read the rebuilt-site walkthrough &rarr;</strong></a>
+        · then come back and tick the first box in <a href="#ph-m1"><strong>Phase −1</strong></a>.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+<script src="../shared/app.js"></script>
+</body>
+</html>

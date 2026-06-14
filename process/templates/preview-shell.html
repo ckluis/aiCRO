@@ -1,0 +1,168 @@
+<!doctype html>
+<!--
+  aiCRO website preview — assembled by build-preview.mjs. Do not hand-edit
+  the assembled preview.html; edit site pages / annotations.json and re-run.
+
+  The proposed website is rendered inside a simulated browser (shadow DOM —
+  style-isolated, file:// safe, no iframes, no network). A guidance sidebar
+  explains every annotated section: What it does · Why it works · where the
+  reasoning lives in the book.
+
+  Markers: {{SUBJECT}} {{DOMAIN}} {{DATE}} {{ACCENT}} · the DATA and JS comment markers below
+
+  Site-page contract: every annotated section carries data-note="<id>"
+  matching a note in annotations.json for that page.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The proposed website — {{SUBJECT}}</title>
+<link rel="stylesheet" href="../shared/aicro.css">
+<style>
+:root { --accent: {{ACCENT}}; --chrome: #2B2A26; --chrome-2: #38362F; --chrome-ink: #D8D5C9; }
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; overflow: hidden; }
+
+/* app bar */
+.appbar { display: flex; align-items: baseline; gap: 1rem; padding: .6rem 1.2rem;
+  border-bottom: 1px solid var(--line); background: var(--paper); flex: none; font-family: var(--sans); }
+.appbar h1 { font-size: 1.02rem; margin: 0; }
+.appbar .kicker { margin: 0; }
+.appbar nav { margin-left: auto; display: flex; gap: 1.1rem; font-size: .78rem; }
+
+/* layout: browser | sidebar — the row MUST be bounded (minmax(0,1fr)) or the
+   implicit row sizes to content height, #vp never overflows, and the whole
+   guided-tour scroll loop dies. Found in browser QA 2026-06-11; keep this. */
+.split { display: grid; grid-template-columns: minmax(0,1fr) 384px; grid-template-rows: minmax(0,1fr); flex: 1; min-height: 0; }
+
+/* ------- simulated browser ------- */
+.browser { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: #E9E6DC; }
+.chrome { flex: none; background: var(--chrome); padding: .55rem .8rem 0; }
+.tabs { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { font: 500 .72rem/1 var(--sans); color: var(--chrome-ink); background: var(--chrome-2);
+  border: 0; border-radius: 7px 7px 0 0; padding: .55em .95em .6em; cursor: pointer;
+  white-space: nowrap; opacity: .75; }
+.tab.on { background: #F2EFE6; color: var(--ink); opacity: 1; }
+.urlrow { display: flex; align-items: center; gap: .6rem; background: #F2EFE6;
+  padding: .45rem .7rem; border-bottom: 1px solid var(--line-2); }
+.dots { display: flex; gap: .38rem; padding: 0 .2rem; }
+.dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+.dots i:nth-child(1){background:#E2604F}.dots i:nth-child(2){background:#E0A33E}.dots i:nth-child(3){background:#6DA960}
+.navbtn { border: 0; background: none; font: 700 .95rem/1 var(--sans); color: var(--ink-2);
+  cursor: pointer; padding: .2rem .35rem; border-radius: var(--radius); }
+.navbtn:disabled { opacity: .3; cursor: default; }
+.navbtn:not(:disabled):hover { background: var(--line); }
+.urlbar { flex: 1; display: flex; align-items: center; gap: .5em; background: #fff;
+  border: 1px solid var(--line-2); border-radius: 99px; padding: .38em 1em;
+  font: .78rem/1.2 var(--sans); color: var(--ink-2); min-width: 0; }
+.urlbar .lock { font-size: .72em; }
+.urlbar b { color: var(--ink); font-weight: 600; }
+.urlbar span.pg { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.devices { display: flex; gap: .15rem; }
+.devices button { border: 1px solid transparent; background: none; font: .78rem/1 var(--sans);
+  padding: .35em .5em; border-radius: var(--radius); cursor: pointer; color: var(--ink-2); }
+.devices button.on { border-color: var(--line-2); background: #fff; color: var(--ink); }
+
+/* viewport */
+#vp { flex: 1; overflow: auto; min-height: 0; padding: 0; scroll-behavior: smooth; }
+#vp.pad { padding: 1.2rem; }
+.frame { background: #fff; min-height: 100%; margin: 0 auto; transition: max-width .25s;
+  box-shadow: 0 2px 18px rgba(26,25,21,.18); }
+#vp.desktop .frame { max-width: none; box-shadow: none; }
+#vp.tablet .frame { max-width: 768px; }
+#vp.phone .frame { max-width: 392px; }
+
+/* ------- guidance sidebar ------- */
+.guide { border-left: 1px solid var(--line); background: var(--paper); overflow-y: auto;
+  min-height: 0; padding: 1.1rem 1.1rem 2rem; font-family: var(--sans); }
+.guide > .kicker { margin-bottom: .2rem; }
+.guide h2 { font-size: 1.05rem; margin: 0 0 .8rem; }
+.guide .pageintro { background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .8rem .9rem; margin-bottom: 1rem; font-size: .8rem; }
+.guide .pageintro p { margin: 0 0 .4rem; max-width: none; }
+.guide .pageintro p:last-child { margin: 0; }
+.note { border: 1px solid var(--line); border-radius: var(--radius); background: #fff;
+  padding: .8rem .9rem .85rem; margin-bottom: .7rem; cursor: pointer;
+  transition: border-color .15s, box-shadow .15s, transform .15s; }
+.note:hover { border-color: var(--line-2); transform: translateY(-1px); }
+.note.on { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent), 0 4px 14px rgba(26,25,21,.08); }
+.note .note-head { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+.note .note-n { flex: none; width: 1.45rem; height: 1.45rem; border-radius: 99px; background: var(--accent);
+  color: #fff; font: 800 .76rem/1 var(--sans); display: grid; place-items: center; }
+.note.on .note-n { background: var(--accent-text, var(--accent)); }
+.note .note-label { font: 700 .7rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink); }
+.note .note-of { margin-left: auto; font: 600 .64rem/1 var(--sans); color: var(--ink-3); }
+.note .note-principle { display: inline-block; font: 700 .62rem/1.3 var(--sans); text-transform: uppercase;
+  letter-spacing: .05em; color: var(--accent-text, var(--accent)); background: var(--accent-wash, #f6e8e0);
+  padding: .2em .55em; border-radius: 99px; margin-bottom: .45rem; }
+.note .note-what { font-weight: 700; font-size: .86rem; line-height: 1.4; margin: 0 0 .35rem; max-width: none; color: var(--ink); }
+.note .note-why { font-size: .8rem; line-height: 1.5; color: var(--ink-2); margin: 0; max-width: none; }
+.note .note-was { font-size: .76rem; line-height: 1.45; color: var(--ink-2); margin: .5rem 0 0; padding: .45rem .6rem;
+  background: var(--paper-2); border-radius: var(--radius); max-width: none; }
+.note .note-was b { color: var(--bad, #9e3119); font-weight: 700; }
+.note .note-book { display: inline-block; font: 700 .72rem/1.3 var(--sans); margin-top: .6rem;
+  color: var(--accent-text, var(--accent)); text-decoration: none; }
+.note .note-book::after { content: " →"; }
+.note .note-book:hover { text-decoration: underline; }
+.guide .keyhint { font-size: .68rem; color: var(--ink-3); margin-top: 1.2rem; }
+
+@media (max-width: 1080px) {
+  .split { grid-template-columns: 1fr; grid-template-rows: minmax(0,1.4fr) minmax(0,1fr); }
+  .guide { border-left: 0; border-top: 2px solid var(--line); }
+}
+@media print {
+  .appbar, .chrome, .guide { display: none !important; }
+  body { overflow: visible; display: block; }
+  #vp { overflow: visible; }
+}
+</style>
+</head>
+<body data-doc="preview">
+
+<header class="appbar">
+  <div>
+    <span class="kicker">{{SUBJECT}} · proposed website · {{DATE}}</span>
+    <h1>The new website, with the reasoning beside it</h1>
+  </div>
+  <nav>
+    <a href="../../open-me.html">← All documents</a>
+    <a href="site/index.html">Open the site standalone ↗</a>
+  </nav>
+</header>
+
+<div class="split">
+  <section class="browser" aria-label="Simulated browser">
+    <div class="chrome">
+      <div class="tabs" id="tabs"></div>
+      <div class="urlrow">
+        <span class="dots"><i></i><i></i><i></i></span>
+        <button class="navbtn" id="back" title="Back" aria-label="Back">‹</button>
+        <button class="navbtn" id="fwd" title="Forward" aria-label="Forward">›</button>
+        <div class="urlbar"><span class="lock">🔒</span><span class="pg"><b>{{DOMAIN}}</b><span id="path">/</span></span></div>
+        <div class="devices" role="group" aria-label="Viewport width">
+          <button data-dev="desktop" class="on" title="Desktop">Desktop</button>
+          <button data-dev="tablet" title="Tablet">Tablet</button>
+          <button data-dev="phone" title="Phone">Phone</button>
+        </div>
+      </div>
+    </div>
+    <div id="vp" class="desktop"><div class="frame"><div id="host"></div></div></div>
+  </section>
+
+  <aside class="guide" aria-label="Guidance">
+    <span class="kicker">Guided tour</span>
+    <h2 id="guide-title">Why this page works</h2>
+    <div id="guide-body"></div>
+    <p class="keyhint">Each numbered pin on the page is a note here. Scroll the page and the active
+    note follows; click a pin or a note to jump between them. Links inside the site navigate the
+    preview, and every note links to the chapter that argues it.</p>
+  </aside>
+</div>
+
+<!-- @DATA -->
+<!-- @JS -->
+</body>
+</html>

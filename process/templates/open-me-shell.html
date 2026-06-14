@@ -1,0 +1,69 @@
+<!doctype html>
+<!--
+  aiCRO cover shell — open-me.html at the engagement root. The only file
+  the client must be told about. One screen of decisions, zero scroll guilt.
+  Rules:
+    · The one-number diagnosis up top: the fact that frames everything
+      (e.g. "5 fixes, 20 minutes, still open after 14 months").
+    · The 20-minute path: at most 3 steps, each a link + minutes.
+    · Deliverable cards: book / plan / website preview / one per GTM deck.
+    · The deep path: a numbered reading order with honest time costs.
+    · Paths are relative: analysis/…; this file lives at the engagement root.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Start here — [SUBJECT]</title>
+<link rel="stylesheet" href="analysis/shared/aicro.css">
+<style>
+:root { --accent: [ACCENT]; }
+body > main { max-width: 1020px; margin: 0 auto; padding: clamp(1.4rem,4vw,3.4rem) clamp(1.2rem,4vw,2.4rem) 4rem; }
+</style>
+</head>
+<body data-doc="open-me">
+<main>
+  <header class="slab">
+    <span class="kicker">[SUBJECT] · growth engagement · [DATE]</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.9rem);max-width:18ch">[Title: the engagement's argument in one line]</h1>
+    <p style="max-width:54ch">[2 sentences: what this folder contains and the spirit
+    of it — built to be acted on, not admired.]</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="n">[N]</span><span class="l">[the one-number diagnosis]</span></div>
+    <div class="stat"><span class="n">[N]</span><span class="l">[supporting number]</span></div>
+    <div class="stat"><span class="n">[N]</span><span class="l">[supporting number]</span></div>
+  </div>
+
+  <h2>Have 20 minutes? Do this, today</h2>
+  <ol>
+    <li>[Step + link into the plan's Phase −1/0] — [N] min</li>
+    <li>[Step] — [N] min</li>
+    <li>[Step] — [N] min</li>
+  </ol>
+
+  <h2>The documents</h2>
+  <div class="cards">
+    <a class="card" href="analysis/plan/index.html"><span class="kicker">Act</span><h3>The Plan</h3>
+      <p>[Phases, gates, every task with owner and minutes.]</p><span class="card-meta">[N] phases · ~[N]-min read</span></a>
+    <a class="card" href="analysis/website/preview.html"><span class="kicker">See</span><h3>The new website, guided</h3>
+      <p>[The rebuilt site in a preview browser, with the why beside every section.]</p><span class="card-meta">[N] pages · [N] notes</span></a>
+    <a class="card" href="analysis/book/index.html"><span class="kicker">Understand</span><h3>The Book</h3>
+      <p>[The full analysis: diagnosis, positioning, customers, execution.]</p><span class="card-meta">[N] chapters · glossary</span></a>
+    <a class="card" href="analysis/gtm/[icp-slug].html"><span class="kicker">Grow · [priority]</span><h3>[Audience] GTM</h3>
+      <p>[One-line scope: copy, posts, emails, calendar.]</p><span class="card-meta">12 slides · paste-ready</span></a>
+    <!-- … one card per GTM deck … -->
+  </div>
+
+  <h2>The deep path</h2>
+  <ol>
+    <li>[Reading order with honest time costs, ending with "argue with it, then re-read the plan."]</li>
+  </ol>
+
+  <footer style="margin-top:3rem"><p class="small">[Version note · how this folder travels
+  (zip it, email it, everything opens offline) · every number tagged, every gate explicit.]</p></footer>
+</main>
+</body>
+</html>
