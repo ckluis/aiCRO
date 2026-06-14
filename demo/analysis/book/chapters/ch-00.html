@@ -1,0 +1,176 @@
+<section class="chapter" id="ch-00" data-num="0" data-title="Read this first" data-part="Before you begin">
+  <header class="chapter-open">
+    <span class="chnum">0</span>
+    <span class="kicker">Before you begin — Chapter 0</span>
+    <h1>Read this first</h1>
+  </header>
+
+  <div class="brief">
+    <span class="kicker">What this chapter establishes</span>
+    <p>Marigold's site is built to <em>describe</em> a cleaning service when its
+    buyer is trying to <em>book</em> one. The single number that captures the gap:
+    of every visitor ready to buy, <strong>none can get a price or a booking
+    without waiting for a callback</strong> — the one step the gig apps removed
+    years ago. Everything else in this book follows from closing that gap and
+    aiming the fixed flow at the one product that compounds: the recurring
+    household plan.</p>
+    <p class="decision"><b>The decision this supports:</b> approve a 90-day rebuild
+    that puts a 60-second self-serve <a class="term" href="#g-booking-flow">booking
+    flow</a> with a real price on screen, then bends the whole site toward
+    recurring. The first move costs you 20 minutes today.</p>
+  </div>
+
+  <h2 id="ch-00-diagnosis">The one-number diagnosis</h2>
+
+  <p>Strip away the cosmetics and the live marigoldhome.co site has one fault that
+  dwarfs the rest: <strong>a buyer with a card in hand cannot complete the
+  purchase.</strong> Every path — the hero, the services grid, the pricing
+  section — ends at the same place: <em>call us</em>, or fill a contact form and
+  wait <span class="tag estimate">24–48h callback — confirm</span>. In a category
+  where people decide at 11pm after a long day, that wait is where the sale dies.
+  The buyer books whoever answers first, which is almost always a gig app.</p>
+
+  <p>So the diagnosis is one number, and the number is <strong>zero</strong>: zero
+  ways to see a price and book online, today, on a site whose entire competitive
+  advantage is being a <em>real company</em> the apps can't be. The trust assets
+  Marigold actually pays for — a <a class="term" href="#g-w2">W-2</a> team,
+  background checks, the 24-hour re-clean guarantee — are real and rare, and they
+  are buried where the booking-ready visitor never reaches them.</p>
+
+  <figure class="exhibit" id="ex-00-diagnosis">
+    <figcaption><span class="exnum"></span>The leak, in one screen
+      <span class="exnote">Where booking-ready demand exits the current site. Severity is rated by revenue impact, not cosmetics.</span></figcaption>
+    <div class="exbody">
+      <table>
+        <thead>
+          <tr><th>What the buyer hits</th><th>What it does</th><th>Severity</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>No online booking, no instant price</td><td>Sends a ready buyer to <em>call or wait</em>; the impulse goes to whoever answers first</td><td><span class="pill p0">Critical</span></td></tr>
+          <tr><td>"Call for a quote"</td><td>Reads as "we'll size you up"; repels the busy professional, attracts the bargain-hunter</td><td><span class="pill p0">Critical</span></td></tr>
+          <tr><td>Trust story buried in the footer</td><td>The most defensible, most expensive asset is the least visible in the path</td><td><span class="pill p1">High</span></td></tr>
+          <tr><td>Recurring treated as one item among many</td><td>Trains demand toward the lowest-value, highest-churn product</td><td><span class="pill p1">High</span></td></tr>
+          <tr><td>Stale "$25 off" popup, dead code <span class="nowrap">(SPARKLE25)</span></td><td>Interrupts the readiest buyers; the dead code manufactures distrust at the card field</td><td><span class="pill p2">Medium</span></td></tr>
+          <tr><td>Generic "we clean homes" headline</td><td>Claims no ground; gives no reason to choose Marigold over a $10-cheaper app</td><td><span class="pill p2">Medium</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </figure>
+
+  <p>Read <a class="exref" href="#ex-00-diagnosis">Exhibit ·</a> top to bottom and
+  the order is the work order: the two critical leaks are losing booking-ready
+  demand <em>this week</em>; the two high ones are leaving Marigold's structural
+  advantage and its best revenue on the table. Fix the conversion plumbing first,
+  then aim it.</p>
+
+  <h2 id="ch-00-thesis">The positioning thesis, in one line</h2>
+
+  <p class="jtbd">The home cleaning you'd trust with a key — a vetted, W-2 team
+  that shows up the same way every time, booked in 60 seconds online.
+    <cite>The position carried sitewide. The buyer's real anxiety isn't "will it be
+    clean" — it's "who am I letting into my home, and will it be the same person
+    next time."</cite></p>
+
+  <p>This is not a slogan; it is a <a class="term" href="#g-moat">moat</a> stated
+  out loud. The category is run by marketplaces that dispatch a different 1099
+  contractor each visit. Three things Marigold already does are expensive enough
+  that the gig model structurally cannot copy them — a W-2 team it trains and
+  stands behind, the same small named team returning to learn your home, and a
+  24-hour re-clean guarantee a real company can honor. The whole site's job is to
+  make those three facts impossible to miss, and to put them <em>inside the
+  booking path</em> rather than on an About page.</p>
+
+  <h2 id="ch-00-first-action">The 20-minute first action</h2>
+
+  <p>You do not need the rebuild to start. The cheapest, highest-trust win is
+  also the fastest: <strong>turn off the stale "$25 off" popup today.</strong> It
+  fires on load with a code (<code>SPARKLE25</code>) that expired last season and
+  now errors at checkout — so it interrupts your readiest buyers <em>and</em>
+  manufactures distrust at the worst possible moment. A premium, trust-led brand
+  does not lead with a discount it can't honor.</p>
+
+  <figure class="exhibit" id="ex-00-first-action">
+    <figcaption><span class="exnum"></span>Do this in the next 20 minutes
+      <span class="exnote">No developer required. Owner-run. Times are the wall-clock cost of each step.</span></figcaption>
+    <div class="exbody">
+      <ul class="checklist" data-checklist="ch-00-first-action">
+        <li><label>Open the site's CMS and find the on-load promo modal (the "$25 off your first clean" / SPARKLE25 popup)</label><span class="meta">~5 min · Renata</span></li>
+        <li><label>Disable it — turn off the popup entirely, do not just edit the code. Save and reload the home page to confirm it no longer fires</label><span class="meta">~5 min · Renata</span></li>
+        <li><label>Replace its job with one honest, live line near the main button — e.g. "First clean? Your deep-clean reset is priced before you book." No modal, no dead code</label><span class="meta">~10 min · Renata</span></li>
+      </ul>
+    </div>
+  </figure>
+
+  <div class="callout why">
+    <span class="kicker">Why this first</span>
+    <p>It is the only fix that <em>removes</em> harm rather than adding work, it
+    needs no developer, and it proves the book's whole thesis in one move: the
+    site should build trust at the moment of purchase, not spend it. See
+    <a class="exref" href="#ex-00-first-action">Exhibit ·</a> — three steps, done
+    before lunch.</p>
+  </div>
+
+  <h2 id="ch-00-why-recurring">Why everything points at one product</h2>
+
+  <p>Fixing the booking flow matters most when it is pointed at the right thing.
+  A one-time clean and a <a class="term" href="#g-recurring">recurring plan</a>
+  are not equals: a recurring household is worth roughly <strong>twelve one-time
+  cleans a year</strong>, every year it stays. The arithmetic is the reason the
+  entire rebuild bends toward recurring.</p>
+
+  <div class="dealmath">
+    <span>Every-2-weeks plan</span>
+    <span class="op">=</span>
+    <span>$149/visit <span class="op">×</span> 26 visits/yr</span>
+    <span class="op">≈</span>
+    <span class="total">$3,874/yr</span>
+    <span class="op">vs.</span>
+    <span>one-time deep clean $329</span>
+    <span class="op">→</span>
+    <span class="total">≈ 11.8×</span>
+  </div>
+
+  <p class="small">$3,874 ÷ $329 ≈ 11.8 one-time cleans per year of recurring value
+  <span class="tag estimate">pricing &amp; cadence — confirm</span>. With
+  <span class="tag estimate">94% staying past 6 months — confirm</span>, a biweekly
+  household clears roughly <strong>$7,700 over two years</strong>. That is where
+  the rebuild — and any future ad spend — should go.</p>
+
+  <h2 id="ch-00-how-to-read">How to read the rest of this book</h2>
+
+  <p>This book is a working tool, not a slide deck: write in it, print it, argue
+  with it. It is print-complete — every interactive layer is an enhancement, and a
+  printout shows 100% of the content. Four chapters follow, each ending where the
+  next begins.</p>
+
+  <figure class="exhibit" id="ex-00-roadmap">
+    <figcaption><span class="exnum"></span>The four chapters, and what each one decides
+      <span class="exnote">Read in order for the argument; jump to Chapter 4 if you only have ten minutes and want the plan.</span></figcaption>
+    <div class="exbody">
+      <table>
+        <thead>
+          <tr><th>Chapter</th><th>The question it answers</th><th>The decision it sets up</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1 · Where you are</strong></td><td>What is the current site actually doing to demand?</td><td>Agree on the six named leaks and their order</td></tr>
+          <tr><td><strong>2 · The position only you can take</strong></td><td>What can Marigold say that the apps structurally cannot?</td><td>Lock the "trusted with a key" position sitewide</td></tr>
+          <tr><td><strong>3 · Customers worth choosing</strong></td><td>Which buyers earn the spend, and which one comes first?</td><td>Fund recurring households; defund the one-time chase</td></tr>
+          <tr><td><strong>4 · The rebuilt site and the 90-day plan</strong></td><td>What gets built, in what order, by when?</td><td>Approve the four-phase plan and start Phase 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </figure>
+
+  <p>Three reading conventions, then you're set. First, <strong>every number is
+  tagged</strong> — <span class="tag measured">measured</span> means observed on
+  the site, <span class="tag benchmark">benchmark</span> means a category norm, and
+  <span class="tag estimate">estimate — confirm</span> means a plausible figure you
+  should check against your own books before you act on it. Second, anything we
+  haven't verified about Marigold is gated <span class="tag verify">verify before
+  publishing</span> — don't put it on the live site until you've confirmed it.
+  Third, terms of art carry a dotted underline and link to the
+  <a class="term" href="#g-recurring">glossary</a>, where each gets one plain
+  breath of explanation. Start at <a class="exref" href="#ex-00-first-action">the
+  20-minute action</a>; read the rest tonight.</p>
+
+</section>

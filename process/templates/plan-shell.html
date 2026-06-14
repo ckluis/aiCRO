@@ -1,0 +1,103 @@
+<!doctype html>
+<!--
+  aiCRO plan shell — the step-by-step execution plan. A build agent copies
+  this structure and fills it from artifact 08-roadmap.md. Placeholder
+  content below shows the required components; replace everything in
+  [BRACKETS]. Rules:
+    · Phases in order: −1 (access gate), 0 (live-defects-only gate), 1…N.
+    · Every task row: what · owner · minutes · day · how (a .path when the
+      action is in a CMS).
+    · Gates use .phase.gate + .gate-note. Nothing after a gate starts until
+      it is green — say so plainly.
+    · The capacity meter must show KEEP hours vs. the owner's real hours;
+      overflow lives in the Deferred section, visibly, with what would
+      unlock it.
+    · End with the 30-day checkpoint block: the binary question and the date.
+    · Checklists persist: wrap in [data-checklist="<unique>"].
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Plan — [SUBJECT]</title>
+<link rel="stylesheet" href="../shared/aicro.css">
+<style>:root { --accent: [ACCENT]; }</style>
+</head>
+<body data-doc="plan">
+<div id="progress"></div>
+<div class="doc">
+
+  <nav class="toc" aria-label="Phases">
+    <div class="brand">[SUBJECT]</div>
+    <div class="brand-sub">The Plan · [DATE]</div>
+    <div class="part">Do in order</div>
+    <a href="#ph-m1"><span class="n">−1</span><span>Access &amp; ownership</span></a>
+    <a href="#ph-0"><span class="n">0</span><span>[Five] credibility fixes</span></a>
+    <a href="#ph-1"><span class="n">1</span><span>[Phase 1 name]</span></a>
+    <!-- … one link per phase … -->
+    <div class="part">Keep honest</div>
+    <a href="#capacity"><span class="n">◷</span><span>Your real capacity</span></a>
+    <a href="#deferred"><span class="n">…</span><span>Deferred (on purpose)</span></a>
+    <a href="#checkpoint"><span class="n">30</span><span>The 30-day check</span></a>
+    <div class="toc-foot">Checkboxes save in your browser.<br>Print this; it prints clean.</div>
+  </nav>
+
+  <main>
+    <span class="kicker">The Plan · [SUBJECT] · [DATE]</span>
+    <h1>[N] phases, in order, sized to your real week</h1>
+
+    <div class="brief">
+      <span class="kicker">How to use this document</span>
+      <p>[Two-3 sentences: what the plan covers, the total first-day time cost,
+      and the rule that phases are sequential — gates are gates.]</p>
+      <div class="decision"><b>If you only do one thing:</b> [the single highest-leverage action, with minutes].</div>
+    </div>
+
+    <section class="phase gate" id="ph-m1">
+      <header>
+        <span class="pill p0">GATE</span>
+        <h3>Phase −1 — Access &amp; ownership</h3>
+        <span class="when">Day 1 · [60] min · once</span>
+      </header>
+      <div class="ph-body">
+        <p class="gate-note">Nothing below starts until this is done. [Why, in one
+        sentence, citing the engagement's own history.]</p>
+        <ul class="checklist" data-checklist="ph-m1">
+          <li><input type="checkbox" value="login"><label>[Task]</label><span class="meta">[Owner] · [10] min</span></li>
+          <!-- … -->
+        </ul>
+        <div class="path"><span class="sep">Where:</span> [CMS] → [Menu] → [Submenu]</div>
+      </div>
+    </section>
+
+    <!-- … more phases; each task that has book rationale links to it:
+         <a href="../book/index.html#ch-07">why → Ch. 7</a> … -->
+
+    <section id="capacity">
+      <h2>Your real capacity</h2>
+      <p>[One paragraph: hours the KEEP set actually costs vs. hours available.]</p>
+      <div class="meter [over]"><i style="width:[NN]%"></i></div>
+      <p class="small">[X.X] hr/week committed of [Y] hr/week you said you have. [Verdict sentence.]</p>
+    </section>
+
+    <section id="deferred">
+      <h2>Deferred — on purpose</h2>
+      <p>[These are good ideas that do not fit the hours. Each gets: what ·
+      what it would cost weekly · what unlocks it.]</p>
+    </section>
+
+    <section id="checkpoint">
+      <h2>The 30-day check — [DATE+30]</h2>
+      <div class="callout warn">
+        <span class="kicker">Binary, no essay</span>
+        <p><b>[The yes/no question].</b> If no: [the prescribed response —
+        a working session, not another document].</p>
+      </div>
+      <p>[The 3-number Day-0 baseline to write down today, with tags.]</p>
+    </section>
+  </main>
+</div>
+<script src="../shared/app.js"></script>
+</body>
+</html>

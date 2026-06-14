@@ -1,0 +1,82 @@
+<!doctype html>
+<!--
+  aiCRO book shell — assembled by build-book.mjs. Do not hand-edit the
+  assembled index.html; edit chapter fragments + meta.json and re-run.
+
+  Assembly contract:
+    · Double-curly tokens (TITLE, SUBJECT, SUBTITLE, DATE, VERSION, THESIS,
+      ACCENT, PREPAREDFOR) come from book/meta.json
+      {subject,title,subtitle,date,version,thesis,accent,preparedFor}
+    · the TOC marker comment      ← replaced with generated nav (parts → chapters → h2 subs)
+    · the CHAPTERS marker comment ← replaced with chapters/*.html fragments in filename order
+
+  Chapter fragment contract (one file = one <section>):
+    <section class="chapter" id="ch-04" data-num="4" data-title="Positioning"
+             data-part="Part II · Strategy">
+      <header class="chapter-open">
+        <span class="chnum">4</span>
+        <span class="kicker">Part II · Strategy — Chapter 4</span>
+        <h1>Positioning: the only thing nobody else can say</h1>
+      </header>
+      <div class="brief">…</div>
+      <h2 id="ch-04-thesis">…</h2>                      ← every h2 carries an id
+      <figure class="exhibit" id="ex-positioning-map">  ← every exhibit carries an id
+        <figcaption><span class="exnum"></span>Positioning map
+          <span class="exnote">Coordinates from artifact 04.</span></figcaption>
+        <div class="exbody">…</div>
+      </figure>
+      … prose may reference <a class="exref" href="#ex-positioning-map">Exhibit ·</a> …
+    </section>
+  Appendices and the glossary are chapters with data-part="Appendix"
+  (glossary entries: <div class="gitem" id="g-<slug>"><dt>…</dt>
+   <div class="plain">one-breath gloss</div><dd>…</dd></div>).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{{TITLE}} — {{SUBJECT}}</title>
+<link rel="stylesheet" href="../shared/aicro.css">
+<style>:root { --accent: {{ACCENT}}; }</style>
+</head>
+<body data-doc="book">
+<div id="progress"></div>
+
+<div class="doc">
+  <nav class="toc" aria-label="Table of contents">
+    <div class="brand">{{SUBJECT}}</div>
+    <div class="brand-sub">{{TITLE}} · {{DATE}}</div>
+    <!-- @TOC -->
+    <div class="toc-foot">
+      {{VERSION}} · Prepared {{DATE}}<br>
+      Open from file:// — no server, no network.<br>
+      Print anytime: this book is print-complete.
+    </div>
+  </nav>
+
+  <main>
+    <header class="slab" id="cover">
+      <span class="kicker">{{SUBJECT}} · {{DATE}} · {{VERSION}}</span>
+      <h1 style="font-size:clamp(2.2rem,4.5vw,3.3rem);max-width:16ch">{{TITLE}}</h1>
+      <p style="font-size:1.1rem;max-width:52ch">{{SUBTITLE}}</p>
+      <p style="font-size:.95rem;opacity:.75;max-width:52ch"><em>{{THESIS}}</em></p>
+      <p class="small" style="opacity:.6">Prepared for {{PREPAREDFOR}}. Every number in this book is tagged
+      <span class="tag measured">measured</span> <span class="tag benchmark">benchmark</span> or
+      <span class="tag estimate">estimate — confirm</span>; anything unconfirmed about you is gated
+      <span class="tag verify">verify before publishing</span>.</p>
+    </header>
+
+    <!-- @CHAPTERS -->
+
+    <footer style="margin-top:4rem;padding-top:1.4rem;border-top:1px solid var(--line)">
+      <p class="small">{{SUBJECT}} — {{TITLE}}, {{VERSION}} ({{DATE}}). Built with aiCRO.
+      Sources and tags are listed in the appendix. This document is a working tool:
+      write in it, print it, argue with it.</p>
+    </footer>
+  </main>
+</div>
+
+<script src="../shared/app.js"></script>
+</body>
+</html>

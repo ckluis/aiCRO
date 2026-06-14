@@ -1,0 +1,1247 @@
+/* ==========================================================================
+   aiCRO landing — theme.css
+   A consulting monograph as a website. Warm paper, system serif display, a
+   single ember accent, numbered exhibits, generous whitespace.
+
+   The page eats its own dog food:
+     - Zero CDNs, zero webfonts (system serif + system sans + mono only)
+     - No @font-face, no @import, no url() to any font — ZERO network requests
+     - Token-first: nothing below :root hard-codes a color/font/radius/dimension
+     - Two-tier ember accent with documented WCAG-AA contrast on every ink token
+     - All motion gated behind prefers-reduced-motion; real @media print
+
+   Implements art-direction.md: §1 tokens, §2 type, §3 exhibit-marker,
+   §4 motion, §5.2 warm hero browser, §6 nine-band treatments, §7 component
+   vocabulary, §8 evidence-tag language, §10 acceptance checklist.
+   ========================================================================== */
+
+/* ==========================================================================
+   §1 TOKEN SYSTEM — the single :root block. Nothing below hard-codes a value.
+   ========================================================================== */
+:root {
+
+  /* ---- §1.1 Surfaces — the warm paper stack ----------------------------- */
+  --paper:   #FBFAF7;   /* page background — warm paper (matches aicro.css) */
+  --paper-2: #F4F2EB;   /* elevated/striped band, table heads, footer, wells */
+  --paper-3: #EFEDE3;   /* deepest paper — rare, the one nested well in hero */
+  --card:    #FFFFFF;   /* card / brief / exhibit fill — true white lifts off paper */
+
+  /* ---- §1.2 Ink scale — every token carries its measured WCAG-AA ratio --- */
+  --ink:   #1A1915;   /* 15.8:1 on --paper, 14.9:1 on --paper-2 — body + headings */
+  --ink-2: #5C594F;   /*  7.0:1 on --paper,  6.6:1 on --paper-2 — lede, secondary, caption */
+  --ink-3: #807C70;   /*  4.0:1 on --paper — UI-ONLY (kicker dim, meta, card-meta);
+                          NEVER body prose. Below the AA-body floor by design. */
+  --line:   #E4E1D6;   /* hairline borders (matches aicro.css) */
+  --line-2: #D2CEC0;   /* stronger internal dividers, table head underline */
+
+  /* ---- §1.3 Ember accent, TWO TIERS. Read the contrast notes before use. -
+     --accent (#B3471D) is the brand ember — looks right everywhere as
+     DECORATION, but too light for small AA text on paper. So all small accent
+     TEXT, links, kicker, button fill use --accent-text (#8C3413, 6.4:1).
+     On the dark slab the polarity flips: --accent-bright carries contrast. */
+  --accent:        #B3471D;   /* 4.1:1 on --paper — DECORATION ONLY: rules, glyphs,
+                                 borders, exhibit numbers, focus rings, hero active-tab
+                                 underline. Not small body text. (Large display ≥24px OK:
+                                 AA large-text floor is 3:1.) */
+  --accent-text:   #8C3413;   /* 6.4:1 on --paper — AA-SAFE TEXT TIER. All small accent
+                                 text, links, kicker, button fill. (alias of --accent-deep) */
+  --accent-deep:   #8C3413;   /* back-compat alias so shared aicro.css rules resolve */
+  --accent-bright: #E06A3A;   /* >4.5:1 on --slab — accent text/elements ON dark slab only;
+                                 never on paper */
+  --accent-wash:   #F6E8E0;   /* tint: ::selection, callout.why bg, active nav pill,
+                                 scroll-sync flash (matches aicro.css) */
+
+  /* ---- §1.4 Semantic — good / warn / bad (evidence + severity) ----------
+     Each semantic ink clears AA on both --paper and its own wash; the wash is
+     only ever a fill behind that same ink, so the pairing is safe by construction. */
+  --good: #2E6B4F;  --good-wash: #E7F0EB;   /* good ≥ 5.6:1 on its wash — [measured], ✓ */
+  --warn: #9A6A00;  --warn-wash: #F7EFDC;   /* warn ≥ 4.8:1 on its wash — [estimate], caution */
+  --bad:  #9E3119;  --bad-wash:  #F7E6E1;   /* bad  ≥ 6.0:1 on its wash — [verify], ✕, P0 */
+
+  /* ---- §1.5 Dark-slab tokens (the few dark moments — punctuation only) --- */
+  --slab:       #211F1A;   /* dark slab background (matches aicro.css) */
+  --slab-2:     #2C2A24;   /* elevated panel inside a slab (stat cells, code) */
+  --slab-ink:   #F3F1E9;   /* 14.2:1 on --slab — body on dark */
+  --slab-ink-2: #C9C5B8;   /*  7.4:1 on --slab — secondary on dark; reading-grade */
+  --slab-line:  rgba(243,241,233,0.16);   /* hairlines on dark */
+
+  /* ---- §1.6 Typography — three system families, NO webfonts ------------- */
+  --serif:   "Iowan Old Style", "Palatino Linotype", Palatino, Charter, Georgia, serif;
+  --display: var(--serif);   /* display = the same serif, set large + tight */
+  --sans:    system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ---- §1.7 Layout vars ------------------------------------------------- */
+  --nav-h:        60px;                      /* sticky topnav height */
+  --content-max:  1140px;                    /* wide rail: hero, bands, footer */
+  --measure:      68ch;                      /* reading measure cap (DESIGN.md rule) */
+  --measure-wide: 90ch;                      /* exhibits, tables, comparison, hero browser */
+  --page-pad-x:   clamp(20px, 5vw, 56px);    /* fluid horizontal page padding */
+  --band-pad-y:   clamp(64px, 9vw, 128px);   /* generous vertical rhythm between sections */
+  --radius:       3px;                        /* the editorial radius — tight, paper-like */
+  --radius-lg:    8px;                        /* hero browser + slab corners only */
+
+  /* ---- §1.8 Shadows — softer/longer than senkani ("money was spent") ---- */
+  --shadow-card: 0 1px 2px rgba(26,25,21,.04), 0 10px 24px -14px rgba(26,25,21,.12);
+  --shadow-pop:  0 2px 6px rgba(26,25,21,.05), 0 32px 64px -28px rgba(26,25,21,.22);
+
+  /* ---- §4.1 Motion — easing + duration tokens (never overshoots) -------- */
+  --ease:      cubic-bezier(.22, .61, .36, 1);   /* ease-out-quint-ish — settles, never bounces */
+  --ease-soft: cubic-bezier(.4, 0, .2, 1);        /* color/opacity micro-transitions */
+  --dur-fast:  140ms;    /* hover/focus color, link underline */
+  --dur-mid:   320ms;    /* scroll-reveal fade+rise, CTA arrow nudge */
+  --dur-slow:  520ms;    /* hero browser scroll-sync card flash settle */
+}
+
+/* ==========================================================================
+   §2 BASE + TYPE
+   ========================================================================== */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }   /* only outside reduced-motion (zeroed below) */
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.65 var(--serif);   /* base body 17px / 1.65 serif (matches aicro.css) */
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga", "kern";
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { max-width: 100%; height: auto; }
+
+/* §2.1 display & heading ladder ----------------------------------------- */
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0 0 .5rem; }
+h1 {            /* hero h1 styled by .hero-title; this is the fallback ladder */
+  font-size: clamp(2.6rem, 6vw, 4.75rem);
+  line-height: 1.06; letter-spacing: -0.02em;
+}
+h2 {            /* section headings */
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  line-height: 1.12; letter-spacing: -0.015em;
+}
+h3 {            /* sub-points, card titles, exhibit headers */
+  font-size: clamp(1.3rem, 2vw, 1.55rem);
+  line-height: 1.18; letter-spacing: -0.01em;
+}
+h4 {            /* inline labels inside cards/asides — apparatus = sans */
+  font: 600 .82rem/1.3 var(--sans);
+  margin: 0 0 .5rem; color: var(--ink-2); letter-spacing: 0;
+}
+h1 .accent, h2 .accent, h3 .accent { color: var(--accent); }  /* ≥24px clears 3:1 large-text floor */
+
+/* §2.3 body / measure / links ------------------------------------------- */
+p, ul, ol { margin: 0 0 1.05rem; max-width: var(--measure); }
+li { margin-bottom: .35rem; }
+a {
+  color: var(--accent-text);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+a:hover { color: var(--accent); }
+strong, b { font-weight: 650; color: var(--ink); }
+em { font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 2.4rem 0; }
+code, kbd, samp { font-family: var(--mono); }
+::selection { background: var(--accent-wash); }
+
+/* lede / subhead — serif 400, --ink-2 */
+.lede {
+  font: 400 clamp(1.15rem, 1.7vw, 1.35rem)/1.5 var(--serif);
+  color: var(--ink-2);
+  max-width: var(--measure);
+  margin: 0 0 1.4rem;
+}
+
+/* small / caption — apparatus = sans */
+small, .small {
+  font: 400 .78rem/1.45 var(--sans);
+  color: var(--ink-2);
+}
+
+/* §2.2 the kicker — the universal apparatus label (only place uppercase OK) */
+.kicker {
+  font: 600 .64rem/1.4 var(--sans);   /* ~10px */
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--accent-text);          /* AA-safe ember text tier */
+  display: block;
+  margin: 0 0 .5rem;
+}
+
+/* §2.3 measure helpers */
+.measure { max-width: var(--measure); }
+.wide    { max-width: var(--measure-wide); }
+.muted   { color: var(--ink-2); }
+.nowrap  { white-space: nowrap; }
+.mt0     { margin-top: 0; }
+.center  { text-align: center; }
+
+/* ==========================================================================
+   ACCESSIBILITY FLOOR — skip nav, focus ring, visually-hidden
+   ========================================================================== */
+.skip-nav {
+  position: absolute;
+  top: -120px;
+  left: 16px;
+  z-index: 500;
+  background: var(--accent-text);   /* AA-safe ember fill */
+  color: var(--card);
+  padding: 10px 16px;
+  border-radius: 0 0 var(--radius) var(--radius);
+  font: 600 .9rem/1.2 var(--sans);
+  text-decoration: none;
+  transition: top var(--dur-fast) var(--ease);
+}
+.skip-nav:focus { top: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);   /* §1.3: focus rings use --accent */
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ==========================================================================
+   §7.10 STICKY NAV — minimal, editorial palette (senkani structure)
+   ========================================================================== */
+nav.topnav {
+  display: flex;
+  align-items: center;
+  height: var(--nav-h);
+  padding: 0 var(--page-pad-x);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: .7rem;
+  font: 600 1.3rem/1 var(--serif);   /* serif wordmark */
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.wordmark-sub {
+  font: 500 .68rem/1 var(--mono);
+  letter-spacing: 0;
+  color: var(--ink-3);   /* UI-only apparatus */
+}
+.topnav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  margin-left: auto;
+}
+.topnav-links a {
+  font: 500 .92rem/1.2 var(--sans);
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+.topnav-links a:hover { color: var(--ink); }
+.topnav-links a.active { color: var(--accent-text); font-weight: 600; }
+
+/* the one nav CTA — ember-filled */
+.btn-nav {
+  background: var(--accent-text);   /* AA-safe ember fill */
+  color: var(--card) !important;
+  padding: .55rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 600 !important;
+  transition: background var(--dur-fast) var(--ease-soft);
+}
+.btn-nav:hover { background: var(--accent); color: var(--card) !important; }
+
+/* hamburger — hidden until mobile */
+.topnav-hamburger {
+  display: none;
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.topnav-hamburger span {
+  display: block;
+  width: 18px; height: 2px;
+  background: var(--ink);
+  margin: 4px 0;
+  border-radius: 1px;
+}
+
+/* ==========================================================================
+   §3 THE EXHIBIT MOTIF — section markers (the page's spine) + numbered figures
+   ========================================================================== */
+
+/* §3.1 section markers: EXHIBIT 03 ──────  THE PROBLEM */
+.exhibit-marker {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 0 auto .9rem;
+  max-width: var(--content-max);
+  font-family: var(--sans);
+}
+.exhibit-marker .exno {
+  font: 600 .72rem/1 var(--mono);
+  letter-spacing: .08em;
+  color: var(--accent);              /* decoration tier — large-ish glyph */
+  font-variant-numeric: tabular-nums;
+}
+.exhibit-marker .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.exhibit-marker .kicker {
+  margin: 0;
+  color: var(--ink-3);               /* dimmed in the marker context */
+}
+
+/* §3.1 slab recolor of the marker */
+.slab .exhibit-marker .exno { color: var(--accent-bright); }
+.slab .exhibit-marker .rule { background: var(--slab-line); }
+.slab .exhibit-marker .kicker { color: var(--slab-ink); opacity: .6; }
+
+/* §3.3 in-band numbered figures — the deliverable's .exhibit (REUSE aicro.css) */
+.exhibit {
+  margin: 1.8rem auto 2rem;
+  max-width: var(--measure-wide);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.exhibit figcaption {
+  font: 600 .78rem/1.45 var(--sans);
+  padding: .65rem .95rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.exhibit figcaption .exnum { color: var(--accent-text); margin-right: .5em; }
+.exhibit figcaption .exnote { font-weight: 400; color: var(--ink-2); display: block; margin-top: .15rem; }
+.exhibit .exbody { padding: 1rem .95rem; }
+.exhibit .exbody.flush { padding: 0; }
+
+/* ==========================================================================
+   §3.4 SECTION SCAFFOLDING — vertical rhythm, single hairline divider
+   ========================================================================== */
+.section {
+  padding: var(--band-pad-y) var(--page-pad-x);
+  border-bottom: 1px solid var(--line);   /* the only divider — no boxes */
+}
+.section-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+/* a calmer reading column inside a wide band */
+.section-inner.measure { max-width: var(--measure); margin: 0 auto; }
+
+/* warm-elevated band (§6.4 solution, §6.7 objections) */
+.section.warm { background: var(--paper-2); }
+
+/* §1.5 / §6: the dark slab — punctuation, not a section style (at most twice) */
+.section.slab,
+.slab {
+  background: var(--slab);
+  color: var(--slab-ink);
+  border-bottom: 0;
+}
+.slab .kicker { color: var(--slab-ink); opacity: .65; }
+.slab h1, .slab h2, .slab h3 { color: var(--slab-ink); }
+.slab .lede, .slab p { color: var(--slab-ink-2); }
+.slab a { color: var(--accent-bright); }
+.slab a:hover { color: var(--slab-ink); }
+.slab strong, .slab b { color: var(--slab-ink); }
+.slab .accent { color: var(--accent-bright); }
+
+/* ==========================================================================
+   §7 BUTTONS — primary = ember fill + white text; ghost = ink outline.
+   No .btn-secondary peach (off-palette).
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font: 600 .98rem/1.2 var(--sans);
+  padding: .72rem 1.3rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-soft),
+              color var(--dur-fast) var(--ease-soft),
+              border-color var(--dur-fast) var(--ease-soft),
+              transform var(--dur-fast) var(--ease);
+}
+.btn-primary {
+  background: var(--accent-text);   /* AA-safe ember fill, white text */
+  color: var(--card);
+  border-color: var(--accent-text);
+}
+.btn-primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--card);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+
+/* ghost on the dark slab inverts to a light outline */
+.slab .btn-ghost { color: var(--slab-ink); border-color: var(--slab-ink-2); }
+.slab .btn-ghost:hover { background: var(--slab-ink); color: var(--slab); }
+/* primary on slab uses the AA-safe fill — light text already legible */
+.slab .btn-primary { background: var(--accent-text); border-color: var(--accent-text); }
+.slab .btn-primary:hover { background: var(--accent-bright); border-color: var(--accent-bright); color: var(--slab); }
+
+.cta-row {
+  display: flex;
+  gap: .9rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* §7 text CTA — ember text + trailing arrow that nudges on hover */
+.cta-text {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font: 600 1.02rem/1.3 var(--sans);
+  color: var(--accent-text);
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+  transition: color var(--dur-fast) var(--ease-soft), gap var(--dur-mid) var(--ease);
+}
+.cta-text::after { content: "→"; transition: transform var(--dur-mid) var(--ease); }
+.cta-text:hover { color: var(--accent); gap: .75rem; }   /* 8px→12px nudge */
+.slab .cta-text { color: var(--accent-bright); border-bottom-color: var(--accent-bright); }
+.slab .cta-text:hover { color: var(--slab-ink); }
+
+/* §5.1 / §7 meta fact row — mono, --ink-3, accent → prefix */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem 1.6rem;
+  margin-top: 1.8rem;
+  font: .82rem/1.5 var(--mono);
+  color: var(--ink-3);   /* UI-only apparatus */
+}
+.meta span { display: inline-flex; align-items: baseline; }
+.meta span::before { content: "→ "; color: var(--accent); margin-right: .35em; }
+.slab .meta { color: var(--slab-ink-2); }
+.slab .meta span::before { color: var(--accent-bright); }
+
+/* ==========================================================================
+   §5 THE HERO (Exhibit 01) — stacked monograph opener
+   ========================================================================== */
+.hero {
+  padding: clamp(72px, 10vw, 120px) var(--page-pad-x) clamp(40px, 6vw, 64px);
+  border-bottom: 1px solid var(--line);
+}
+.hero-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+.hero .kicker { text-align: center; }
+
+/* §5.1 the centered title block — lede stays ≤68ch */
+.hero-title {
+  max-width: var(--measure);
+  margin: 0 auto .4rem;
+  text-align: center;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(2.6rem, 6vw, 4.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+.hero-title .accent { color: var(--accent); }   /* one lifted word, display size = AA-safe */
+.hero .lede {
+  max-width: var(--measure);
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+.hero .cta-row { justify-content: center; }
+.hero .meta { justify-content: center; }
+
+/* §5.1 hero proof — a quiet two-line block under the CTAs: framing, then a real
+   demo result. Restrained on purpose; the tag carries the discipline. */
+.hero-proof {
+  max-width: var(--measure);
+  margin: 1.1rem auto 0;
+  text-align: center;
+  font-size: .92rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.hero-proof span { display: block; }
+.hero-proof-result { color: var(--ink-2); margin-top: .3rem; }
+.hero-proof .tag { white-space: nowrap; }
+
+/* §5.2 THE LIVE SIMULATED BROWSER — warm editorial, not dark steel */
+.hero-browser {
+  /* the wide showpiece — breaks out past the content column on purpose so the
+     embedded "website in a website" renders at a near-desktop width. The guide
+     rail is a fixed 340px, so every extra px here goes to the site viewport
+     (~900px on a wide screen vs the cramped ~510px of the 90ch cap). */
+  max-width: min(1240px, 94vw);
+  margin: clamp(40px, 6vw, 64px) auto 0;
+  background: var(--card);                  /* WARM paper-white chrome */
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);            /* the one dramatic shadow on the page */
+  overflow: hidden;
+}
+
+/* §5.2 chrome (the toolbar), warm */
+.hb-chrome {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .65rem .9rem;
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--sans);
+  user-select: none;
+}
+.hb-dots { display: flex; gap: .45rem; flex: none; }
+.hb-dots i {
+  display: block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--line-2);   /* monochrome traffic dots — restrained, not cartoon */
+}
+.hb-dots i:first-child { background: var(--accent); }   /* one ember dot + two neutral */
+
+/* page tabs — active underlined in --accent */
+.hb-tabs {
+  display: flex;
+  gap: 1.1rem;
+  flex: none;
+}
+.hb-tab {
+  font: 500 .82rem/1.6 var(--sans);
+  color: var(--ink-3);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  background: none;
+  border-top: 0; border-left: 0; border-right: 0;
+}
+.hb-tab:hover { color: var(--ink-2); }
+.hb-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* URL bar — paper-2 fill, mono, with a small home/lock glyph */
+.hb-url {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  border-radius: 99px;
+  padding: .3rem .8rem;
+  font: .78rem/1.4 var(--mono);
+  color: var(--ink-2);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.hb-url .hb-lock { color: var(--ink-3); flex: none; }
+
+/* device toggle — desktop / tablet / phone */
+.hb-devices { display: flex; gap: .3rem; flex: none; }
+.hb-dev {
+  font: 600 .72rem/1 var(--sans);
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: .35rem .5rem;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft);
+}
+.hb-dev:hover { color: var(--ink-2); background: var(--paper-3); }
+.hb-dev.active, .hb-dev.on { background: var(--accent-wash); color: var(--accent-text); }
+
+/* §5.2 body — two columns: viewport (flex 1.7) + guidance sidebar (~340px) */
+.hb-body {
+  display: flex;
+  align-items: stretch;
+  /* a fixed window height so the viewport scrolls INTERNALLY like a real
+     browser — without this the site renders full-height and never scrolls,
+     killing the scroll-sync. (browser QA 2026-06-13) */
+  height: clamp(440px, 64vh, 600px);
+}
+.hb-viewport {
+  flex: 1.7;
+  min-width: 0;
+  background: var(--paper);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+.hb-frame {
+  display: block;
+  width: 100%;
+  height: auto;          /* content taller than the viewport → it scrolls */
+  min-height: 100%;
+  border: 0;
+  background: var(--paper);
+}
+
+/* the guidance sidebar — paper-2 fill, left hairline */
+.hb-guide {
+  flex: none;
+  width: 340px;
+  background: var(--paper-2);
+  border-left: 1px solid var(--line);
+  padding: 1rem .95rem;
+  overflow-y: auto;
+  /* stretches to the fixed .hb-body height and scrolls its own notes */
+}
+.hb-guide > .kicker { color: var(--ink-3); margin-bottom: .8rem; }
+
+/* §5.2 guidance note cards — active card gets ember left border + white fill */
+.hb-guide .note {
+  background: transparent;
+  border: 1px solid transparent;
+  border-left: 2px solid transparent;
+  border-radius: var(--radius);
+  padding: .7rem .85rem;
+  margin-bottom: .55rem;
+  transition: background var(--dur-slow) var(--ease-soft),
+              border-color var(--dur-fast) var(--ease-soft);
+  cursor: pointer;
+}
+.hb-guide .note:last-child { margin-bottom: 0; }
+.hb-guide .note .note-head { display: flex; align-items: center; gap: .45rem; margin-bottom: .45rem; }
+.hb-guide .note .note-n {
+  flex: none; width: 1.4rem; height: 1.4rem; border-radius: 99px;
+  background: var(--accent); color: #fff; font: 800 .72rem/1 var(--sans);
+  display: grid; place-items: center;
+}
+.hb-guide .note .note-label {
+  font: 700 .66rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink);
+}
+.hb-guide .note .note-of { margin-left: auto; font: 600 .6rem/1 var(--sans); color: var(--ink-3); }
+.hb-guide .note .note-principle {
+  display: inline-block; font: 700 .6rem/1.3 var(--sans); text-transform: uppercase; letter-spacing: .05em;
+  color: var(--accent-text); background: var(--accent-wash); padding: .2em .55em; border-radius: 99px; margin-bottom: .45rem;
+}
+.hb-guide .note .note-what {
+  font: 600 .92rem/1.4 var(--serif);   /* What — the move, serif */
+  color: var(--ink); margin: 0 0 .35rem;
+}
+.hb-guide .note .note-why {
+  font: 400 .78rem/1.5 var(--sans);     /* Why — the reasoning, sans, --ink-2 */
+  color: var(--ink-2); margin: 0;
+}
+.hb-guide .note .note-was {
+  font: 400 .74rem/1.45 var(--sans); color: var(--ink-2);
+  margin: .5rem 0 0; padding: .45rem .6rem; background: var(--paper-2); border-radius: var(--radius);
+}
+.hb-guide .note .note-was b { color: var(--bad); font-weight: 700; }
+.hb-guide .note .note-book {
+  font: 700 .74rem/1.3 var(--sans);     /* From the book → link */
+  color: var(--accent-text); text-decoration: none;
+  display: inline-block; margin-top: .55rem;
+}
+.hb-guide .note .note-book::after { content: " →"; }
+.hb-guide .note .note-book:hover { text-decoration: underline; }
+/* §4.2.2 the active card — the signature scroll-sync state */
+.hb-guide .note {
+  background: transparent; border: 1px solid transparent; border-radius: var(--radius);
+}
+.hb-guide .note.on {
+  background: var(--card);
+  border-color: var(--line);
+  box-shadow: inset 3px 0 0 var(--accent), var(--shadow-card);
+}
+
+/* a target section flashing when a guidance card is clicked (scroll-sync) */
+.hb-flash { animation: hb-flash var(--dur-slow) var(--ease-soft) 1; }
+@keyframes hb-flash {
+  from { background: var(--accent-wash); }
+  to   { background: transparent; }
+}
+
+/* ==========================================================================
+   §6.2 / §6.9 DARK STAT STRIP — senkani's giant-numeral band, recolored
+   ========================================================================== */
+.stat-strip {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+.stat-strip-head { max-width: var(--measure); }
+.stat-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6rem;
+}
+.stat-strip .stat { padding: .4rem 0; }
+.stat-strip .stat .num {
+  display: block;
+  font: 600 clamp(2.4rem, 4vw, 3.4rem)/1 var(--serif);
+  letter-spacing: -0.025em;
+  color: var(--slab-ink);
+}
+.stat-strip .stat .num em { color: var(--accent-bright); font-style: normal; }
+.stat-strip .stat .num small { font-size: .34em; font-family: var(--sans); font-weight: 600; color: var(--slab-ink-2); letter-spacing: 0; margin-left: .15em; }
+.stat-strip .stat .label {
+  display: block;
+  margin-top: .6rem;
+  font: .82rem/1.45 var(--sans);
+  color: var(--slab-ink-2);
+}
+
+/* ==========================================================================
+   §7 PAPER STAT ROW (REUSE aicro.css) — in-band proof numbers
+   ========================================================================== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 1.6rem auto;
+  max-width: var(--measure-wide);
+}
+.stats .stat { background: var(--card); padding: .9rem 1rem; }
+.stats .stat .n { font: 650 1.5rem/1.1 var(--serif); display: block; letter-spacing: -.01em; }
+.stats .stat .l { font: .72rem/1.4 var(--sans); color: var(--ink-2); display: block; margin-top: .25rem; }
+
+/* ==========================================================================
+   §7 BRIEF — the one summary device (REUSE aicro.css)
+   ========================================================================== */
+.brief {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);   /* decoration tier */
+  border-radius: var(--radius);
+  padding: 1.15rem 1.35rem 1.05rem;
+  margin: 1.6rem auto 2.2rem;
+  max-width: var(--measure);
+  box-shadow: var(--shadow-card);
+}
+.brief .kicker { color: var(--ink-3); margin-bottom: .35rem; }
+.brief p { font-size: .98rem; }
+.brief p:last-child { margin-bottom: 0; }
+.brief .decision {
+  font: .85rem/1.5 var(--sans);
+  margin-top: .7rem; padding-top: .7rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+}
+.brief .decision b { color: var(--ink); }
+
+/* ==========================================================================
+   §6.7 CALLOUTS — left rule, one flavor per point (REUSE aicro.css)
+   ========================================================================== */
+.callout {
+  border-left: 3px solid var(--line-2);
+  padding: .15rem 0 .15rem 1.1rem;
+  margin: 1.4rem 0;
+  max-width: var(--measure);
+  color: var(--ink-2);
+  font-size: .97rem;
+}
+.callout > :last-child { margin-bottom: 0; }
+.callout .kicker { color: var(--ink-3); }
+.callout.why  { border-color: var(--accent); }
+.callout.why .kicker { color: var(--accent-text); }
+.callout.warn {
+  border-color: var(--warn); background: var(--warn-wash);
+  padding: .8rem 1.1rem; border-radius: 0 var(--radius) var(--radius) 0;
+}
+.callout.warn .kicker { color: var(--warn); }
+.callout.good {
+  border-color: var(--good); background: var(--good-wash);
+  padding: .8rem 1.1rem; border-radius: 0 var(--radius) var(--radius) 0;
+}
+.callout.good .kicker { color: var(--good); }
+
+/* ==========================================================================
+   §3.3 / §6 TABLES + COMPARISON TREATMENT (REUSE aicro.css + ✓/✕)
+   ========================================================================== */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font: .86rem/1.5 var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+.exhibit table { border: 0; }
+th {
+  text-align: left;
+  font: 600 .68rem/1.4 var(--sans);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-2);
+  padding: .55rem .8rem;
+  border-bottom: 2px solid var(--line-2);   /* table head underline */
+  background: var(--card);
+  vertical-align: bottom;
+}
+td {
+  padding: .6rem .8rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--ink);
+}
+tr:last-child td { border-bottom: 0; }
+tbody tr:hover td { background: var(--paper-2); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* §6.8 comparison cells — row labels in --ink, ✓ good, ✕ bad/accent */
+.cmp th.col { text-align: center; }
+.cmp td.col { text-align: center; }
+.cmp .rowlabel { font-weight: 650; color: var(--ink); }
+/* the aiCRO column gets a faint ember tint so the winner is legible-by-design */
+.cmp th.col.own, .cmp td.col.own { background: var(--accent-wash); }
+.cmp .yes, .cmp .no { font-weight: 600; }
+.cmp .yes::before { content: "✓ "; color: var(--good); font-weight: 700; }
+.cmp .no { color: var(--ink-2); }
+.cmp .no::before { content: "✕ "; color: var(--bad); font-weight: 700; }
+.cmp .partial::before { content: "~ "; color: var(--warn); font-weight: 700; }
+
+/* ==========================================================================
+   §8 EVIDENCE-TAG DESIGN LANGUAGE — first-class on-page tokens (REUSE aicro.css)
+   The bracketed literal is mono so it reads as a token, not a label.
+   ========================================================================== */
+.tag {
+  display: inline-block;
+  font: 500 .66rem/1.3 var(--sans);
+  padding: .12em .5em;
+  border-radius: var(--radius);
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.tag code, .tag .lit { font-family: var(--mono); font-size: .95em; }
+.tag.measured  { background: var(--good-wash); color: var(--good); }
+.tag.benchmark { background: var(--paper-2); color: var(--ink-2); border: 1px solid var(--line); }
+.tag.estimate  { background: var(--warn-wash); color: var(--warn); }
+.tag.verify    { background: var(--bad-wash); color: var(--bad); font-weight: 700; }
+/* a row of tags used as a legend (§6.7 objection #1) */
+.tag-legend { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.1rem 0; }
+
+/* §7 severity pills (REUSE aicro.css) */
+.pill {
+  display: inline-block;
+  font: 700 .64rem/1 var(--sans);
+  letter-spacing: .05em;
+  padding: .3em .55em .28em;
+  border-radius: 99px;
+  vertical-align: middle;
+}
+.pill.p0 { background: var(--bad-wash);  color: var(--bad);   border: 1px solid currentColor; }
+.pill.p1 { background: var(--warn-wash); color: var(--warn);  border: 1px solid currentColor; }
+.pill.p2 { background: var(--paper-2);   color: var(--ink-2); border: 1px solid var(--line-2); }
+
+/* ==========================================================================
+   §7 DEAL-MATH STRIP (REUSE aicro.css)
+   ========================================================================== */
+.dealmath {
+  font: 500 .92rem/1.5 var(--sans);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: .8rem 1rem;
+  margin: 1.2rem auto;
+  max-width: var(--measure-wide);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem .9rem;
+}
+.dealmath .op { color: var(--ink-3); }
+.dealmath .total { font-weight: 700; color: var(--accent-text); }
+
+/* ==========================================================================
+   §6.3 JTBD / customer-voice quote — the problem section's device (REUSE)
+   ========================================================================== */
+.jtbd {
+  font: italic 1.08rem/1.6 var(--serif);
+  border-left: 3px solid var(--accent);
+  margin: 1.6rem 0;
+  padding: .2rem 0 .2rem 1.2rem;
+  max-width: var(--measure);
+}
+.jtbd cite {
+  display: block;
+  font: .76rem/1.5 var(--sans);
+  font-style: normal;
+  color: var(--ink-2);
+  margin-top: .5rem;
+}
+
+/* ==========================================================================
+   §6.4 / §6.6 CARD GRIDS — benefits + the 5-deliverable grid (REUSE aicro.css)
+   ========================================================================== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: .9rem;
+  margin: 1.6rem 0;
+  max-width: var(--content-max);
+}
+a.card { text-decoration: none; color: inherit; }
+.card {
+  display: block;
+  background: var(--card);             /* white lifts off both paper and warm bands */
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.05rem 1.1rem 1rem;
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--dur-fast) var(--ease-soft),
+              transform var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease-soft);
+}
+a.card:hover {
+  border-color: var(--accent-text);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-pop);
+}
+.card .kicker { margin-bottom: .3rem; }
+.card h3 { margin: 0 0 .35rem; font-size: 1.02rem; }
+.card p { font: .84rem/1.5 var(--sans); color: var(--ink-2); margin: 0; }
+.card p + p { margin-top: .5rem; }
+.card .card-meta { font: .7rem/1.4 var(--sans); color: var(--ink-3); margin-top: .6rem; }
+
+/* flagship deliverable card — ember top-rule + 2-col span (review A5) */
+.card-flag { grid-column: span 2; border-top: 3px solid var(--accent); }
+.card-flag .kicker { color: var(--accent-text); }
+@media (max-width:640px){ .card-flag { grid-column: auto; } }
+
+/* widow/orphan control — zero-dependency, evergreen-browser (review A6) */
+p, li, .lede, .jtbd, blockquote, figcaption, .label, .card p, .pipe-step p { text-wrap: pretty; }
+h1, h2, h3, .hero-title, .exhibit figcaption { text-wrap: balance; }
+.path { text-wrap: pretty; }
+
+/* ==========================================================================
+   §6.5 THE PIPELINE DIAGRAM — CSS-only flow inside an .exhibit (NEW)
+   ========================================================================== */
+.pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: .9rem;
+  padding: .4rem 0;
+}
+.pipe-step {
+  flex: 1 1 180px;
+  min-width: 0;
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow-card);
+}
+/* hairline arrow connector between steps */
+.pipe-step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  font: 1rem/1 var(--sans);
+  z-index: 1;
+}
+.pipe-step .pipe-n {
+  display: block;
+  font: 600 .72rem/1 var(--mono);
+  letter-spacing: .08em;
+  color: var(--accent);              /* mono step number, decoration tier */
+  margin-bottom: .5rem;
+  font-variant-numeric: tabular-nums;
+}
+.pipe-step h3 { font-size: .98rem; margin: 0 0 .3rem; }
+.pipe-step p { font: .8rem/1.5 var(--sans); color: var(--ink-2); margin: 0; max-width: none; }
+.pipe-step.active { border-color: var(--accent); }
+
+/* the single human gate between strategy and build — warn-tinted badge */
+.pipe-gate {
+  flex: 0 0 auto;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font: 700 .64rem/1 var(--sans);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--warn);
+  background: var(--warn-wash);
+  border: 1px solid var(--warn);
+  border-radius: 99px;
+  padding: .35rem .7rem;
+}
+.pipe-gate::before { content: "⏸"; }
+
+/* ==========================================================================
+   §7 CLICK PATH / INSTALL LINE (REUSE aicro.css) — the final-CTA command
+   ========================================================================== */
+.path {
+  font: .82rem/1.7 var(--mono);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: .7rem .9rem;
+  margin: .9rem auto;
+  max-width: var(--measure-wide);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.path .sep { color: var(--accent-text); }
+/* path on the dark slab (final CTA literal next step) */
+.slab .path {
+  background: var(--slab-2);
+  border-color: var(--slab-line);
+  color: var(--slab-ink);
+}
+.slab .path .sep { color: var(--accent-bright); }
+
+/* ==========================================================================
+   §4.2.1 SCROLL-REVEAL — opacity + small rise on entry (NEW)
+   ========================================================================== */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--dur-mid) var(--ease), transform var(--dur-mid) var(--ease);
+  will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* staggered children (cards in a grid) — ~60ms cadence */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--dur-mid) var(--ease), transform var(--dur-mid) var(--ease);
+}
+[data-reveal-stagger].is-visible > * { opacity: 1; transform: none; }
+[data-reveal-stagger].is-visible > *:nth-child(1) { transition-delay: 0ms; }
+[data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 60ms; }
+[data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 120ms; }
+[data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 180ms; }
+[data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 240ms; }
+[data-reveal-stagger].is-visible > *:nth-child(6) { transition-delay: 300ms; }
+
+/* ==========================================================================
+   §7.10 FOOTER — quiet apparatus strip, --paper-2 (senkani structure)
+   ========================================================================== */
+footer.site-foot {
+  background: var(--paper-2);
+  border-top: 1px solid var(--line);
+  padding: clamp(48px, 7vw, 72px) var(--page-pad-x) 40px;
+}
+.foot-grid {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+.foot-brand { max-width: 40ch; }
+.foot-wordmark {
+  font: 600 1.7rem/1 var(--serif);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: .6rem;
+}
+.foot-tagline {
+  font: .9rem/1.55 var(--sans);
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 42ch;
+}
+.foot-col h4 {
+  font: 600 .68rem/1.4 var(--sans);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--ink-3);
+  margin: 0 0 .8rem;
+}
+.foot-col ul { list-style: none; padding: 0; margin: 0; max-width: none; }
+.foot-col li { margin-bottom: .5rem; }
+.foot-col a {
+  font: .9rem/1.4 var(--sans);
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.foot-col a:hover { color: var(--accent-text); text-decoration: underline; }
+.foot-meta {
+  max-width: var(--content-max);
+  margin: clamp(2rem, 4vw, 2.5rem) auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .8rem;
+  font: .78rem/1.5 var(--mono);
+  color: var(--ink-3);   /* UI-only apparatus */
+}
+.foot-meta code {
+  font-family: var(--mono);
+  color: var(--accent-text);
+  background: var(--card);
+  padding: 1px 5px;
+  border-radius: var(--radius);
+}
+
+/* ==========================================================================
+   §5.3 / RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1040px) {
+  /* §5.3 hero browser body stacks: viewport on top, guidance strip below */
+  .hb-body { flex-direction: column; height: auto; }
+  /* flex:none + min-height:0 so the 60vh cap actually holds in a column flex —
+     otherwise the viewport grows to full content height, the hero balloons,
+     and the scroll-reveal never fires (blank hero on phones). QA 2026-06-13 */
+  .hb-viewport { flex: none; height: 60vh; min-height: 0; }
+  .hb-guide {
+    width: auto;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    max-height: none;
+    display: flex;
+    gap: .6rem;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+  /* comparison/figures must scroll sideways on phones, not clip (QA 2026-06-13) */
+  .exhibit { overflow-x: hidden; }
+  .exhibit .exbody { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .hb-guide > .kicker { display: none; }
+  .hb-guide .note { flex: 0 0 240px; margin-bottom: 0; }
+
+  /* dark stat strip stacks */
+  .stat-strip { grid-template-columns: 1fr; gap: 2rem; }
+  .stat-strip-grid { grid-template-columns: repeat(2, 1fr); }  /* 2×2 on tablet */
+
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .foot-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 780px) {
+  /* mobile nav: hamburger + collapsing link drawer */
+  .topnav-hamburger { display: block; }
+  .topnav-links {
+    display: none;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 1.2rem var(--page-pad-x) 1.5rem;
+    box-shadow: var(--shadow-card);
+    z-index: 199;
+  }
+  .topnav-links.open { display: flex; }
+  .btn-nav { width: 100%; text-align: center; }
+}
+
+@media (max-width: 640px) {
+  /* §5.3 headline shrinks; meta wraps; CTAs full-width stacked */
+  .hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
+  .hero .cta-row { flex-direction: column; align-items: stretch; }
+  .hero .cta-row .btn { width: 100%; justify-content: center; }
+  .stat-strip-grid { grid-template-columns: 1fr; }   /* 1 col mobile */
+  .pipeline { flex-direction: column; }
+  .pipe-step:not(:last-child)::after {
+    content: "↓";
+    right: 50%; top: auto; bottom: -.85rem;
+    transform: translateX(50%);
+  }
+  .pipe-gate { align-self: stretch; justify-content: center; }
+  .foot-grid { grid-template-columns: 1fr; }
+  .foot-meta { flex-direction: column; }
+  .cards { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   §4.3 REDUCED-MOTION CONTRACT (non-negotiable)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html { scroll-behavior: auto; }
+  /* scroll-reveal elements render in final state — page complete with motion off */
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .cta-text:hover { gap: .4rem; }
+}
+
+/* ==========================================================================
+   §9 / §10 REAL @media print — nav hidden, slabs → ink-on-paper, exhibits intact
+   ========================================================================== */
+@media print {
+  :root { --paper: #fff; --paper-2: #fff; }
+  body { font-size: 10.5pt; line-height: 1.5; background: #fff; }
+
+  /* hide all interactive chrome */
+  nav.topnav, .skip-nav, .topnav-hamburger, .hb-chrome .hb-devices,
+  .hb-guide .note-book, .meta { display: none !important; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* dark slabs collapse to ink-on-paper, bordered for structure */
+  .section.slab, .slab {
+    background: #fff !important;
+    color: var(--ink) !important;
+    border: 2px solid var(--ink);
+  }
+  .slab h1, .slab h2, .slab h3, .slab p, .slab .lede,
+  .slab .kicker, .slab strong { color: var(--ink) !important; opacity: 1; }
+  .stat-strip .stat .num, .stat-strip .stat .num em { color: var(--ink) !important; }
+  .stat-strip .stat .label { color: var(--ink-2) !important; }
+
+  /* exhibits, cards, callouts intact and unbroken across pages */
+  .exhibit, .brief, .callout, .dealmath, .card, .pipe-step, .hero-browser {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+  .section { padding: 1.2rem 0; border-bottom: 1px solid var(--line); }
+  tbody tr:hover td { background: transparent; }
+
+  /* the hero browser prints as a static plate */
+  .hb-frame { min-height: 240px; }
+  .hb-guide { max-height: none; }
+}
